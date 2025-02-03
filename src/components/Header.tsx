@@ -90,7 +90,7 @@ export default function Header() {
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803C9A]/10 to-[#FA4B99]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
                 <Image
                   src="/logo.jpg"
-                  alt="Rest Revive and Thrive Logo"
+                  alt="Nextali Logo"
                   fill
                   className="object-contain rounded-full transform transition-transform duration-700 group-hover:scale-110 animate-butterfly"
                   sizes="(max-width: 640px) 48px, 56px"
@@ -98,7 +98,7 @@ export default function Header() {
                 />
               </div>
               <span className="text-lg sm:text-xl lg:text-2xl font-bold gradient-text whitespace-nowrap">
-                Rest Revive Thrive
+                Nextali
               </span>
             </Link>
           </div>
