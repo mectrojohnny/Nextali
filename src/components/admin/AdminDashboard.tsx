@@ -17,7 +17,7 @@ import ResourcesManagement from './ResourcesManagement';
 
 type AdminSection = 'posts' | 'community' | 'comments' | 'analytics' | 'trending' | 'social' | 'intro' | 'today' | 'resources';
 
-const ADMIN_EMAILS = ['akalagborojohn@gmail.com', 'dollymediateam@gmail.com'];
+const ADMIN_EMAILS = ['akalagborojohn@gmail.com', 'nextalihq@gmail.com'];
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow flex justify-center items-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#803C9A]"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#751731]"></div>
         </main>
         <Footer />
       </div>
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
       items: [
         { id: 'posts', label: 'Blog Management', icon: 'article' },
         { id: 'trending', label: 'Trending Content', icon: 'trending_up' },
-        { id: 'today', label: 'Happening Today', icon: 'today' },
+        { id: 'today', label: "Today's Updates", icon: 'today' },
         { id: 'resources', label: 'Resources', icon: 'library_books' }
       ]
     },
@@ -114,15 +114,15 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50/50 via-white to-pink-50/50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#751731]/5 via-white to-[#F4D165]/5">
       <Header />
       <main className="flex-grow pt-24 pb-16 flex">
         {/* Left Sidebar Navigation */}
-        <div className="w-64 flex-shrink-0 pr-4 border-r border-purple-100">
+        <div className="w-64 flex-shrink-0 pr-4 border-r border-[#751731]/10">
           <div className="sticky top-24">
             <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[#803C9A]/10 via-[#9C27B0]/5 to-[#E91E63]/10 blur-xl rounded-2xl" />
-              <h1 className="relative text-2xl font-bold bg-gradient-to-r from-[#803C9A] via-[#9C27B0] to-[#E91E63] bg-clip-text text-transparent px-4 mb-6">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[#751731]/10 via-[#F4D165]/5 to-[#751731]/10 blur-xl rounded-2xl" />
+              <h1 className="relative text-2xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent px-4 mb-6">
                 Admin Dashboard
               </h1>
             </div>
@@ -130,8 +130,8 @@ export default function AdminDashboard() {
               {navigationGroups.map((group) => (
                 <div key={group.title} className="space-y-2">
                   <div className="relative">
-                    <div className="absolute -inset-2 bg-gradient-to-r from-[#803C9A]/5 to-transparent rounded-lg" />
-                    <h2 className="relative text-sm font-semibold text-[#803C9A] uppercase tracking-wider px-4">
+                    <div className="absolute -inset-2 bg-gradient-to-r from-[#751731]/5 to-transparent rounded-lg" />
+                    <h2 className="relative text-sm font-semibold text-[#751731] uppercase tracking-wider px-4">
                       {group.title}
                     </h2>
                   </div>
@@ -142,8 +142,8 @@ export default function AdminDashboard() {
                         onClick={() => setActiveSection(item.id as AdminSection)}
                         className={`flex items-center w-full space-x-2 px-4 py-2.5 text-sm transition-all duration-300 ${
                           activeSection === item.id
-                            ? 'bg-gradient-to-r from-[#803C9A] via-[#9C27B0] to-[#E91E63] text-white shadow-lg shadow-purple-200'
-                            : 'hover:bg-white/80 hover:shadow-md hover:scale-[1.02] text-gray-700'
+                            ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-lg shadow-[#751731]/20'
+                            : 'hover:bg-white/80 hover:shadow-md hover:scale-[1.02] text-gray-700 hover:text-[#751731]'
                         } rounded-xl`}
                       >
                         <span className="material-icons-outlined text-[20px]">{item.icon}</span>
@@ -165,9 +165,9 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="relative bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-purple-100/50"
+            className="relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-[#751731]/10"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 via-transparent to-pink-50/50 rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#751731]/5 via-transparent to-[#F4D165]/5 rounded-2xl" />
             <div className="relative">
               {activeSection === 'posts' && <BlogManagement />}
               {activeSection === 'trending' && <TrendingManagement />}
@@ -180,12 +180,12 @@ export default function AdminDashboard() {
               {activeSection === 'analytics' && (
                 <div className="text-center py-12">
                   <div className="relative">
-                    <div className="absolute -inset-4 bg-gradient-to-br from-[#803C9A]/5 via-[#9C27B0]/5 to-[#E91E63]/5 blur-xl rounded-full" />
-                    <span className="relative material-icons-outlined text-6xl bg-gradient-to-br from-[#803C9A] to-[#E91E63] bg-clip-text text-transparent mb-4">
+                    <div className="absolute -inset-4 bg-gradient-to-br from-[#751731]/5 via-[#F4D165]/5 to-[#751731]/5 blur-xl rounded-full" />
+                    <span className="relative material-icons-outlined text-6xl bg-gradient-to-br from-[#751731] to-[#F4D165] bg-clip-text text-transparent mb-4">
                       analytics
                     </span>
                   </div>
-                  <h3 className="text-xl font-medium bg-gradient-to-r from-[#803C9A] to-[#E91E63] bg-clip-text text-transparent mb-2">
+                  <h3 className="text-xl font-medium bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent mb-2">
                     Analytics Coming Soon
                   </h3>
                   <p className="text-gray-600">

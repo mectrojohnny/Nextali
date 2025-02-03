@@ -80,14 +80,14 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed w-full bg-white z-50 shadow-sm">
+    <header className="fixed w-full bg-white/95 backdrop-blur-sm z-50 shadow-sm border-b border-[#751731]/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 justify-between items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white overflow-hidden p-1 transition-all duration-300 group-hover:scale-105 hover:shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#803C9A]/10 to-[#FA4B99]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#751731]/10 to-[#F4D165]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
                 <Image
                   src="/logo.png"
                   alt="Nextali Logo"
@@ -97,25 +97,28 @@ export default function Header() {
                   priority
                 />
               </div>
-              <span className="text-lg sm:text-xl lg:text-2xl font-bold gradient-text whitespace-nowrap">
-                Nextali
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent whitespace-nowrap">
+                  Nextali
+                </span>
+                <span className="text-xs sm:text-sm text-gray-600 font-medium">Empowering African Business</span>
+              </div>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:space-x-6 lg:space-x-8">
-            <Link href="/resources" className="text-gray-700 hover:text-[#803C9A] px-3 py-2 text-base font-medium">
+            <Link href="/resources" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
               Resources
             </Link>
-            <Link href="/community" className="text-gray-700 hover:text-[#803C9A] px-3 py-2 text-base font-medium">
+            <Link href="/community" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
               Community
             </Link>
-            <Link href="/posts" className="text-gray-700 hover:text-[#803C9A] px-3 py-2 text-base font-medium">
+            <Link href="/posts" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
               Blog
             </Link>
             {user?.email === 'admin@example.com' && (
-              <Link href="/admin" className="text-gray-700 hover:text-[#803C9A] px-3 py-2 text-base font-medium">
+              <Link href="/admin" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
                 Admin Dashboard
               </Link>
             )}
@@ -127,9 +130,9 @@ export default function Header() {
                   <button
                     ref={authButtonRef}
                     onClick={() => setShowAuthMenu(!showAuthMenu)}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#803C9A]/5 hover:bg-[#803C9A]/10 transition-colors"
+                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-[#751731]/5 hover:bg-[#751731]/10 transition-colors"
                   >
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#803C9A] to-[#FF5757] flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center shadow-md">
                       <span className="text-base font-semibold text-white">
                         {(user.displayName || user.email || 'U')[0].toUpperCase()}
                       </span>
@@ -142,11 +145,11 @@ export default function Header() {
                   {showAuthMenu && (
                     <div 
                       ref={authMenuRef}
-                      className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg py-2 border border-gray-100"
+                      className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl py-2 border border-[#751731]/10"
                     >
                       <button
                         onClick={handleSignOut}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#803C9A]/5 transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#751731]/5 transition-colors"
                       >
                         Sign Out
                       </button>
@@ -157,7 +160,7 @@ export default function Header() {
                 <button
                   ref={authButtonRef}
                   onClick={handleGoogleSignIn}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white hover:shadow-md transition-all"
+                  className="flex items-center space-x-2 px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#751731] to-[#F4D165] text-white hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
                 >
                   <span className="material-icons-outlined text-lg">login</span>
                   <span className="text-sm font-medium">Sign In</span>
@@ -175,7 +178,7 @@ export default function Header() {
                 onClick={() => setShowAuthMenu(!showAuthMenu)}
                 className="flex items-center space-x-2"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#803C9A] to-[#FF5757] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center shadow-md">
                   <span className="text-base font-semibold text-white">
                     {(user.displayName || user.email || 'U')[0].toUpperCase()}
                   </span>
@@ -185,7 +188,7 @@ export default function Header() {
               <button
                 ref={authButtonRef}
                 onClick={handleGoogleSignIn}
-                className="p-2 rounded-full bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white"
+                className="p-2 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
               >
                 <span className="material-icons-outlined">login</span>
               </button>
@@ -193,7 +196,7 @@ export default function Header() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-3 rounded-md text-gray-700 hover:text-[#803C9A] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#803C9A] touch-manipulation"
+              className="inline-flex items-center justify-center p-3 rounded-md text-gray-700 hover:text-[#751731] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#751731] touch-manipulation"
               aria-expanded={isOpen}
               aria-label="Open main menu"
             >
@@ -218,24 +221,24 @@ export default function Header() {
         onClick={() => setIsOpen(false)}
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link href="/resources" className="text-gray-700 hover:text-[#803C9A] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+          <Link href="/resources" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
             Resources
           </Link>
-          <Link href="/community" className="text-gray-700 hover:text-[#803C9A] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+          <Link href="/community" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
             Community
           </Link>
-          <Link href="/posts" className="text-gray-700 hover:text-[#803C9A] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+          <Link href="/posts" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
             Blog
           </Link>
           {user?.email === 'admin@example.com' && (
-            <Link href="/admin" className="text-gray-700 hover:text-[#803C9A] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+            <Link href="/admin" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
               Admin Dashboard
             </Link>
           )}
           {user && (
             <button
               onClick={handleSignOut}
-              className="w-full text-left text-gray-700 hover:text-[#803C9A] px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50"
+              className="w-full text-left text-gray-700 hover:text-[#751731] px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50"
             >
               Sign Out
             </button>
@@ -251,7 +254,7 @@ export default function Header() {
         >
           <div className="px-4 py-3 border-b border-gray-100">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#803C9A] to-[#FF5757] flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center">
                 <span className="text-xl font-semibold text-white">
                   {(user.displayName || user.email || 'U')[0].toUpperCase()}
                 </span>
@@ -279,7 +282,7 @@ export default function Header() {
                     value={newDisplayName}
                     onChange={(e) => setNewDisplayName(e.target.value)}
                     placeholder={user.displayName || 'Enter display name'}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-[#803C9A] focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-[#751731] focus:border-transparent"
                   />
                 </div>
                 <div className="flex justify-end space-x-2">
@@ -291,7 +294,7 @@ export default function Header() {
                   </button>
                   <button
                     onClick={handleUpdateProfile}
-                    className="px-3 py-1.5 text-sm text-white bg-gradient-to-r from-[#803C9A] to-[#FF5757] rounded-md hover:shadow-md transition-all"
+                    className="px-3 py-1.5 text-sm text-white bg-gradient-to-r from-[#751731] to-[#F4D165] rounded-md hover:shadow-md transition-all"
                   >
                     Save Changes
                   </button>
@@ -302,7 +305,7 @@ export default function Header() {
             <>
               <button
                 onClick={() => setShowProfileEdit(true)}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#803C9A]/5 transition-colors flex items-center"
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#751731]/5 transition-colors flex items-center"
               >
                 <span className="material-icons-outlined text-lg mr-2">person</span>
                 Edit Profile
@@ -314,7 +317,7 @@ export default function Header() {
               <div className="border-t border-gray-100 mt-2">
                 <button
                   onClick={handleSignOut}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#803C9A]/5 transition-colors flex items-center"
+                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#751731]/5 transition-colors flex items-center"
                 >
                   <span className="material-icons-outlined text-lg mr-2">logout</span>
                   Sign Out

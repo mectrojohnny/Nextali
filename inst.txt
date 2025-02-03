@@ -110,3 +110,20 @@ Overall Ecosystem Impact:  5 years  overview
 • Sustainability Score: 80% of supported businesses achieving 
 profitability 
 8 
+
+hAvs2iuOgz-NVtVxUb10QSPPnLs
+
+oud name	
+dg0wv6niu
+API key	
+914652298777761
+API secret	
+***************************
+
+API environment variable	
+CLOUDINARY_URL=cloudinary://914652298777761:***************************@dg0wv6niu
+
+
+
+
+updat ehte cloudinary credentials  and also let me know if  i  need to do further confiuration on cloudinary
