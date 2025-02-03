@@ -70,33 +70,36 @@ export default function BlogCard({ post }: BlogCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+      className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 hover:-translate-y-1"
     >
       <Link href={`/posts/${post.slug}`}>
-        <div className="relative h-40 sm:h-48 w-full">
+        <div className="relative h-48 w-full overflow-hidden">
           <SafeImage
             src={post.featuredImage}
             alt={post.title || 'Blog post featured image'}
             fill
-            className="object-cover"
+            className="object-cover transform group-hover:scale-105 transition-transform duration-300"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#751731]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
-        <div className="p-4 sm:p-6">
-          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+        <div className="p-6">
+          <div className="flex flex-wrap gap-2 mb-3">
             {post.category.map((cat) => (
               <span
                 key={cat}
-                className="px-2 py-0.5 sm:py-1 bg-purple-50 text-purple-600 rounded-full text-[10px] sm:text-xs font-medium"
+                className="px-3 py-1 text-xs font-medium bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-full"
               >
                 {cat}
               </span>
             ))}
           </div>
-          <h3 className="text-base sm:text-xl font-semibold text-gray-900 mb-1.5 sm:mb-2 line-clamp-2">{post.title}</h3>
-          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 line-clamp-2">{post.excerpt}</p>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-1.5 sm:space-x-2">
-              <div className="relative w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden">
+          <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#751731] transition-colors duration-300">
+            {post.title}
+          </h3>
+          <p className="text-gray-600 mb-4 line-clamp-2">{post.excerpt}</p>
+          <div className="flex items-center justify-between border-t border-gray-100 pt-4">
+            <div className="flex items-center space-x-3">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-[#751731]/10">
                 <SafeImage
                   src={post.author.avatar}
                   alt={post.author.name}
@@ -104,9 +107,9 @@ export default function BlogCard({ post }: BlogCardProps) {
                   className="object-cover"
                 />
               </div>
-              <span className="text-xs sm:text-sm text-gray-600">{post.author.name}</span>
+              <span className="text-sm font-medium text-[#751731]">{post.author.name}</span>
             </div>
-            <span className="text-xs sm:text-sm text-gray-500">
+            <span className="text-sm text-gray-500">
               {new Date(post.publishedAt).toLocaleDateString()}
             </span>
           </div>

@@ -5,6 +5,7 @@ export interface BlogPost {
   content: string;
   excerpt: string;
   featuredImage: string;
+  coverImage?: string;
   category: string[];
   tags: string[];
   status: 'draft' | 'published';
@@ -13,6 +14,10 @@ export interface BlogPost {
   author: {
     name: string;
     avatar: string;
+    email?: string;
+    role?: string;
+    bio?: string;
+    socialLink?: string;
   };
   layout: 'classic' | 'modern' | 'minimal' | 'magazine';
   isTrending?: boolean;
@@ -26,6 +31,7 @@ export interface BlogFormData {
   content: string;
   excerpt: string;
   featuredImage: string;
+  coverImage?: string;
   category: string[];
   tags: string[];
   status: 'draft' | 'published';

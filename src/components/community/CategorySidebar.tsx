@@ -35,7 +35,7 @@ export default function CategorySidebar({
       {/* Mobile Toggle Button */}
       <button
         onClick={() => setIsMobileOpen(true)}
-        className="md:hidden fixed bottom-6 left-6 z-30 bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white p-3 rounded-full shadow-lg"
+        className="md:hidden fixed bottom-6 left-6 z-30 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white p-3 rounded-full shadow-lg"
       >
         <span className="material-icons-outlined">category</span>
       </button>
@@ -59,20 +59,20 @@ export default function CategorySidebar({
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         } md:translate-x-0`}
       >
-        <div className="absolute inset-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-r border-[#803C9A]/20 dark:border-[#803C9A]/40">
+        <div className="absolute inset-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-r border-[#751731]/20 dark:border-[#751731]/40">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="h-full overflow-y-auto"
             style={{
               scrollbarWidth: 'thin',
-              scrollbarColor: theme === 'dark' ? '#803C9A40 transparent' : '#803C9A20 transparent'
+              scrollbarColor: theme === 'dark' ? '#75173140 transparent' : '#75173120 transparent'
             }}
           >
             <div className="p-4 sm:p-6">
               <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm pt-2 pb-4 -mt-2 -mx-2 px-2">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-[#803C9A] to-[#FF5757] bg-clip-text text-transparent">
+                  <h2 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
                     Categories
                   </h2>
                   <div className="flex items-center space-x-2">
@@ -100,8 +100,8 @@ export default function CategorySidebar({
                   whileTap={{ scale: 0.98 }}
                   className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
                     selectedCategory === 'all'
-                      ? 'bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white shadow-md'
-                      : 'hover:bg-[#803C9A]/10 dark:hover:bg-[#803C9A]/20 text-gray-700 dark:text-gray-300'
+                      ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md'
+                      : 'hover:bg-[#751731]/10 dark:hover:bg-[#751731]/20 text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   <div className="flex items-center">
@@ -117,8 +117,8 @@ export default function CategorySidebar({
                     whileTap={{ scale: 0.98 }}
                     className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
                       selectedCategory === category.id
-                        ? 'bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white shadow-md'
-                        : 'hover:bg-[#803C9A]/10 dark:hover:bg-[#803C9A]/20 text-gray-700 dark:text-gray-300'
+                        ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md'
+                        : 'hover:bg-[#751731]/10 dark:hover:bg-[#751731]/20 text-gray-700 dark:text-gray-300'
                     }`}
                   >
                     <div className="flex items-center justify-between group">
@@ -129,7 +129,7 @@ export default function CategorySidebar({
                       <span className={`text-xs ${
                         selectedCategory === category.id
                           ? 'text-white'
-                          : 'text-gray-500 dark:text-gray-400 group-hover:text-[#803C9A] dark:group-hover:text-[#FF5757]'
+                          : 'text-gray-500 dark:text-gray-400 group-hover:text-[#751731] dark:group-hover:text-[#F4D165]'
                       }`}>
                         {category.count}
                       </span>

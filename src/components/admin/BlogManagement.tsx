@@ -54,19 +54,32 @@ interface BlogPost {
     avatar: string;
   };
   slug: string;
+  coverImage?: string;
 }
 
 // Use the categories from types.ts
 const CATEGORIES = BLOG_CATEGORIES;
 
-const initialFormData = {
+interface FormData {
+  title: string;
+  content: string;
+  excerpt: string;
+  featuredImage: string;
+  coverImage: string;
+  category: BlogCategory[];
+  tags: string[];
+  status: 'draft' | 'published';
+}
+
+const initialFormData: FormData = {
   title: '',
   content: '',
   excerpt: '',
   featuredImage: '',
-  category: [] as BlogCategory[],
-  tags: [] as string[],
-  status: 'draft' as 'draft' | 'published',
+  coverImage: '',
+  category: [],
+  tags: [],
+  status: 'draft',
 };
 
 export default function BlogManagement() {
@@ -74,10 +87,11 @@ export default function BlogManagement() {
   const [loading, setLoading] = useState(true);
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<FormData>(initialFormData);
   const [uploading, setUploading] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
+  const [imageType, setImageType] = useState<'cover' | 'featured'>('featured');
 
   useEffect(() => {
     fetchPosts();
@@ -104,7 +118,7 @@ export default function BlogManagement() {
     }
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>): Promise<string | undefined> => {
     const file = e.target.files?.[0];
     if (!file) {
       return;
@@ -126,11 +140,8 @@ export default function BlogManagement() {
       setUploading(true);
       setImageError(false);
       
-      // Upload to Cloudinary
-      console.log('Starting image upload...');
       const imageUrl = await uploadFile(file);
-      console.log('Image uploaded successfully:', imageUrl);
-
+      
       if (!imageUrl || !imageUrl.startsWith('http')) {
         throw new Error('Invalid image URL returned from upload');
       }
@@ -144,13 +155,12 @@ export default function BlogManagement() {
         fileSize: file.size,
       });
 
-      // Update form with the new image URL
-      setFormData(prev => ({ ...prev, featuredImage: imageUrl }));
-      
+      return imageUrl;
     } catch (error) {
       console.error('Error handling image:', error);
       setImageError(true);
       alert(error instanceof Error ? error.message : 'Failed to upload image. Please try again.');
+      return undefined;
     } finally {
       setUploading(false);
       // Clear the input
@@ -166,7 +176,12 @@ export default function BlogManagement() {
   };
 
   const handleGallerySelect = (url: string) => {
-    setFormData(prev => ({ ...prev, featuredImage: url }));
+    if (imageType === 'cover') {
+      setFormData(prev => ({ ...prev, coverImage: url }));
+    } else {
+      setFormData(prev => ({ ...prev, featuredImage: url }));
+    }
+    setShowGallery(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -195,7 +210,9 @@ export default function BlogManagement() {
         updatedAt: Timestamp.now(),
         author: {
           name: user.displayName || user.email?.split('@')[0] || 'Anonymous',
-          avatar: user.photoURL || '/images/avatars/default.jpg'
+          avatar: user.photoURL || '/images/avatars/default.jpg',
+          email: user.email,
+          uid: user.uid
         }
       };
 
@@ -235,7 +252,8 @@ export default function BlogManagement() {
       content: post.content,
       excerpt: post.excerpt,
       featuredImage: post.featuredImage || '',
-      category: post.category,
+      coverImage: post.coverImage || '',
+      category: post.category as BlogCategory[],
       tags: post.tags,
       status: post.status,
     });
@@ -260,7 +278,7 @@ export default function BlogManagement() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">Blog Posts</h1>
+        <h1 className="text-xl font-semibold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">Blog Posts</h1>
         <button
           onClick={() => setShowEditor(!showEditor)}
           className="px-4 py-2 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
@@ -283,62 +301,113 @@ export default function BlogManagement() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-[#751731]">Featured Image</label>
-              <div className="mt-2 space-y-4">
-                <div className="flex items-center gap-4">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="block w-full text-sm text-gray-500
-                      file:mr-4 file:py-2 file:px-4
-                      file:rounded-full file:border-0
-                      file:text-sm file:font-semibold
-                      file:bg-[#751731]/5 file:text-[#751731]
-                      hover:file:bg-[#751731]/10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowGallery(true)}
-                    className="px-4 py-2 text-sm font-medium text-[#751731] bg-[#751731]/5 rounded-full hover:bg-[#751731]/10 transition-colors duration-200"
-                  >
-                    Browse Gallery
-                  </button>
-                </div>
-
-                {formData.featuredImage && isValidImageUrl(formData.featuredImage) && !imageError ? (
-                  <div className="relative w-48 h-32 overflow-hidden rounded-lg border border-gray-200">
-                    <Image
-                      src={formData.featuredImage}
-                      alt="Featured image preview"
-                      fill
-                      className="object-cover"
-                      onError={handleImageError}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Cover Image Field */}
+              <div>
+                <label className="block text-sm font-medium text-[#751731]">Cover Image (Hero)</label>
+                <p className="text-sm text-gray-500 mb-2">This image will be displayed as the hero image at the top of your blog post.</p>
+                <div className="mt-2 space-y-4">
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const imageUrl = await handleImageUpload(e);
+                        if (imageUrl) {
+                          setFormData(prev => ({ ...prev, coverImage: imageUrl }));
+                        }
+                      }}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-[#751731]/5 file:text-[#751731]
+                        hover:file:bg-[#751731]/10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageType('cover');
+                        setShowGallery(true);
+                      }}
+                      className="px-4 py-2 text-sm font-medium text-[#751731] bg-[#751731]/5 rounded-full hover:bg-[#751731]/10 transition-colors duration-200"
+                    >
+                      Browse Gallery
+                    </button>
                   </div>
-                ) : formData.featuredImage && (
-                  <div className="text-sm text-red-500">
-                    Failed to load image. Please try uploading again.
+
+                  {formData.coverImage && isValidImageUrl(formData.coverImage) && !imageError ? (
+                    <div className="relative w-full h-40 overflow-hidden rounded-lg border border-gray-200">
+                      <Image
+                        src={formData.coverImage}
+                        alt="Cover image preview"
+                        fill
+                        className="object-cover"
+                        onError={handleImageError}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  ) : formData.coverImage && (
+                    <div className="text-sm text-red-500">
+                      Failed to load cover image. Please try uploading again.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Featured Image Field */}
+              <div>
+                <label className="block text-sm font-medium text-[#751731]">Featured Image (Content)</label>
+                <p className="text-sm text-gray-500 mb-2">This image will be displayed within your blog post content.</p>
+                <div className="mt-2 space-y-4">
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const imageUrl = await handleImageUpload(e);
+                        if (imageUrl) {
+                          setFormData(prev => ({ ...prev, featuredImage: imageUrl }));
+                        }
+                      }}
+                      className="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-full file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-[#751731]/5 file:text-[#751731]
+                        hover:file:bg-[#751731]/10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImageType('featured');
+                        setShowGallery(true);
+                      }}
+                      className="px-4 py-2 text-sm font-medium text-[#751731] bg-[#751731]/5 rounded-full hover:bg-[#751731]/10 transition-colors duration-200"
+                    >
+                      Browse Gallery
+                    </button>
                   </div>
-                )}
-                {uploading && (
-                  <div className="flex items-center space-x-2 text-sm text-[#751731]">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#751731] border-t-transparent"></div>
-                    <span>Uploading image...</span>
-                  </div>
-                )}
+
+                  {formData.featuredImage && isValidImageUrl(formData.featuredImage) && !imageError ? (
+                    <div className="relative w-full h-40 overflow-hidden rounded-lg border border-gray-200">
+                      <Image
+                        src={formData.featuredImage}
+                        alt="Featured image preview"
+                        fill
+                        className="object-cover"
+                        onError={handleImageError}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    </div>
+                  ) : formData.featuredImage && (
+                    <div className="text-sm text-red-500">
+                      Failed to load featured image. Please try uploading again.
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-
-            {/* Image Gallery Modal */}
-            {showGallery && (
-              <ImageGallery
-                onSelect={handleGallerySelect}
-                onClose={() => setShowGallery(false)}
-              />
-            )}
 
             <div>
               <label className="block text-sm font-medium text-[#751731]">Categories</label>
@@ -476,6 +545,25 @@ export default function BlogManagement() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Image Gallery Modal */}
+      {showGallery && (
+        <ImageGallery
+          onSelect={handleGallerySelect}
+          onClose={() => setShowGallery(false)}
+        />
+      )}
+
+      {uploading && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-xl">
+            <div className="flex items-center space-x-3">
+              <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#751731] border-t-transparent"></div>
+              <span className="text-[#751731]">Uploading image...</span>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { auth } from '@/lib/firebase'
+import { auth, db } from '@/lib/firebase'
 import { 
   signInWithPopup, 
   GoogleAuthProvider, 
@@ -12,6 +12,13 @@ import {
   User,
   updateProfile
 } from 'firebase/auth'
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+
+interface UserProfile {
+  displayName: string;
+  bio: string;
+  socialLink: string;
+}
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -19,6 +26,9 @@ export default function Header() {
   const [showAuthMenu, setShowAuthMenu] = useState(false)
   const [showProfileEdit, setShowProfileEdit] = useState(false)
   const [newDisplayName, setNewDisplayName] = useState('')
+  const [newBio, setNewBio] = useState('')
+  const [newSocialLink, setNewSocialLink] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
   const authMenuRef = useRef<HTMLDivElement>(null)
   const authButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -40,12 +50,36 @@ export default function Header() {
   }, [])
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-    })
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUser(user);
+      if (user) {
+        // Fetch user profile data when user signs in
+        const userProfile = await getUserProfile(user.uid);
+        if (userProfile) {
+          setNewDisplayName(userProfile.displayName || '');
+          setNewBio(userProfile.bio || '');
+          setNewSocialLink(userProfile.socialLink || '');
+        }
+      }
+    });
 
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribe();
+  }, []);
+
+  const getUserProfile = async (userId: string): Promise<UserProfile | null> => {
+    try {
+      const userDocRef = doc(db, 'user_profiles', userId);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (userDoc.exists()) {
+        return userDoc.data() as UserProfile;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      return null;
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
@@ -67,15 +101,66 @@ export default function Header() {
   }
 
   const handleUpdateProfile = async () => {
-    if (!user || !newDisplayName.trim()) return;
+    if (!user) return;
+    setIsSaving(true);
     try {
-      await updateProfile(user, {
-        displayName: newDisplayName.trim()
+      // Prepare the profile data first
+      const profileData = {
+        displayName: newDisplayName.trim(),
+        bio: newBio.trim(),
+        socialLink: newSocialLink.trim(),
+        email: user.email || '',
+        updatedAt: new Date().toISOString()
+      };
+
+      // Update profile in Firestore first
+      const userDocRef = doc(db, 'user_profiles', user.uid);
+      
+      try {
+        // Try to update existing document
+        await updateDoc(userDocRef, profileData);
+      } catch (error) {
+        // If document doesn't exist, create it
+        await setDoc(userDocRef, {
+          ...profileData,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      // After Firestore update succeeds, update Firebase Auth profile
+      if (newDisplayName.trim()) {
+        await updateProfile(user, {
+          displayName: newDisplayName.trim()
+        });
+      }
+
+      // Update local state to reflect changes
+      setUser((prevUser) => {
+        if (prevUser) {
+          return {
+            ...prevUser,
+            displayName: newDisplayName.trim() || prevUser.displayName || ''
+          } as User;
+        }
+        return prevUser;
       });
-      setShowProfileEdit(false);
-      setNewDisplayName('');
+      
+      // Show success animation
+      setIsSaving(false);
+      
+      // Close the edit form after a short delay
+      setTimeout(() => {
+        setShowProfileEdit(false);
+      }, 1000);
     } catch (error) {
       console.error('Error updating profile:', error);
+      setIsSaving(false);
+      // More specific error message
+      if (error instanceof Error) {
+        alert(`Failed to update profile: ${error.message}`);
+      } else {
+        alert('Failed to update profile. Please try again.');
+      }
     }
   };
 
@@ -285,18 +370,67 @@ export default function Header() {
                     className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-[#751731] focus:border-transparent"
                   />
                 </div>
-                <div className="flex justify-end space-x-2">
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Short Bio
+                  </label>
+                  <textarea
+                    value={newBio}
+                    onChange={(e) => setNewBio(e.target.value)}
+                    placeholder="Tell us about yourself"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-[#751731] focus:border-transparent"
+                    rows={3}
+                    maxLength={200}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Social Media Link
+                  </label>
+                  <input
+                    type="url"
+                    value={newSocialLink}
+                    onChange={(e) => setNewSocialLink(e.target.value)}
+                    placeholder="https://twitter.com/yourusername"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-md text-sm focus:ring-2 focus:ring-[#751731] focus:border-transparent"
+                  />
+                </div>
+                <div className="flex justify-end space-x-2 pt-2">
                   <button
-                    onClick={() => setShowProfileEdit(false)}
+                    onClick={() => {
+                      setShowProfileEdit(false);
+                      // Reset form values to current values
+                      const userProfile = getUserProfile(user.uid).then(profile => {
+                        if (profile) {
+                          setNewDisplayName(profile.displayName || '');
+                          setNewBio(profile.bio || '');
+                          setNewSocialLink(profile.socialLink || '');
+                        }
+                      });
+                    }}
                     className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800"
+                    disabled={isSaving}
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleUpdateProfile}
-                    className="px-3 py-1.5 text-sm text-white bg-gradient-to-r from-[#751731] to-[#F4D165] rounded-md hover:shadow-md transition-all"
+                    disabled={isSaving}
+                    className={`px-4 py-1.5 text-sm text-white bg-gradient-to-r from-[#751731] to-[#F4D165] rounded-md hover:shadow-md transition-all relative ${
+                      isSaving ? 'cursor-not-allowed opacity-75' : ''
+                    }`}
                   >
-                    Save Changes
+                    <span className={`transition-opacity duration-200 ${isSaving ? 'opacity-0' : 'opacity-100'}`}>
+                      Save Changes
+                    </span>
+                    {isSaving && (
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </span>
+                    )}
                   </button>
                 </div>
               </div>

@@ -116,7 +116,7 @@ export async function getPublicBlogPosts(options: {
       orderBy('publishedAt', 'desc')
     ];
 
-    if (options.category) {
+    if (options.category && options.category !== 'All') {
       constraints.push(where('category', 'array-contains', options.category));
     }
 
@@ -130,8 +130,18 @@ export async function getPublicBlogPosts(options: {
     }
 
     const postsQuery = query(collection(db, 'blog_posts'), ...constraints);
+    
+    logger.debug('Fetching blog posts with query:', { 
+      category: options.category,
+      tag: options.tag,
+      trending: options.trending,
+      limit: options.limit
+    });
+
     const snapshot = await getDocs(postsQuery);
     const posts = snapshot.docs.map(doc => formatBlogPost(doc.id, doc.data()));
+
+    logger.debug('Fetched posts count:', posts.length);
 
     // If tag filter is applied, do it in memory since Firestore doesn't support
     // array-contains with multiple conditions
@@ -141,7 +151,10 @@ export async function getPublicBlogPosts(options: {
 
     return posts;
   } catch (error) {
-    logger.error('Error fetching public blog posts:', error);
+    logger.error('Error fetching public blog posts:', { 
+      error: error instanceof Error ? error.message : 'Unknown error',
+      options 
+    });
     throw error;
   }
 }
@@ -169,9 +182,11 @@ export async function createBlogPost(data: BlogFormData): Promise<BlogPost> {
       slug: generateSlug(data.title),
       publishedAt: now,
       updatedAt: now,
-      author: {
-        name: 'Dr. Dolly',
-        avatar: '/images/avatars/drdolly.jpg'
+      author: data.author || {
+        name: 'Anonymous',
+        avatar: '/images/default-avatar.svg',
+        email: '',
+        uid: ''
       },
       isTrending: data.isTrending || false,
       trendingOrder: data.trendingOrder || 999
@@ -223,6 +238,7 @@ function formatBlogPost(id: string, data: any): BlogPost {
     content: data.content || '',
     excerpt: data.excerpt || '',
     featuredImage: data.featuredImage || '',
+    coverImage: data.coverImage || '',
     category: Array.isArray(data.category) ? data.category : [],
     tags: Array.isArray(data.tags) ? data.tags : [],
     status: data.status || 'draft',
@@ -231,7 +247,9 @@ function formatBlogPost(id: string, data: any): BlogPost {
     layout: data.layout || 'classic',
     author: {
       name: data.author?.name || 'Anonymous',
-      avatar: data.author?.avatar || '/images/default-avatar.svg'
+      avatar: data.author?.avatar || '/images/default-avatar.svg',
+      email: data.author?.email || '',
+      uid: data.author?.uid || ''
     },
     isTrending: data.isTrending || false,
     trendingOrder: data.trendingOrder || 999
