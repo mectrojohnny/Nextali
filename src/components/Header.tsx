@@ -89,7 +89,7 @@ export default function Header() {
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white overflow-hidden p-1 transition-all duration-300 group-hover:scale-105 hover:shadow-lg">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#803C9A]/10 to-[#FA4B99]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
                 <Image
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="Nextali Logo"
                   fill
                   className="object-contain rounded-full transform transition-transform duration-700 group-hover:scale-110 animate-butterfly"
