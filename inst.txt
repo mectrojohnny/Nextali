@@ -1,0 +1,23 @@
+colour theme
+
+ #803C9A
+ #FA4B99
+
+start all responses with #Akalas
+ you must check the codebase for all prompt
+ when a question is asked you must brainstorm and respond and only code when the question  asked you to do so
+ strict typescript checking 
+ The design must be responsive and mobile friendly
+ The design must be aesthetically pleasing and modern
+ when i say brainstorm, i mean brainstorm do not code
+ you must design mobile screens first
+ when ask to design the mobile screens for already existing desktop screen you must not alter a single element in the desktop ui
+you must only push to repo when I asked you to do so and ensure you use add .
+ THe platform is RestReviv and Thrive, a personal brand dedicate to fibromyalgia  awareness and empoweing users  with resoures and  tools in their  Fibromyalgia and CFS/M as well general health and devleopment
+ it is owned by  a  GP who is also a patient  as seen in the sample message below
+Hello, I'm Dr. Dolly. I'm a GP living with fibromyalgia, and I'm passionate about shedding light on invisible illnesses. I see you, I hear you, and I believe you and we will navigate this journey together. #RestRevive Thrive
+
+it must be colourful and shooting. there arelso social media pages and a youtube channel but the focus of the website is  not the medical doctor but the patient
+always escape ' and " with ldquo 
+
+always write the  associated firestore rules and deploy the firestore rules 

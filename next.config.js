@@ -1,0 +1,17 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  images: {
+    domains: [
+      'firebasestorage.googleapis.com', 
+      'res.cloudinary.com',
+      'lh3.googleusercontent.com'
+    ],
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+    dirs: ['src']
+  }
+}
+
+module.exports = nextConfig 

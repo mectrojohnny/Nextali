@@ -1,0 +1,18 @@
+colour theme
+
+ #803C9A
+ #FA4B99
+
+ strict typescript checking 
+ The design must be responsive and mobile friendly
+ The design must be aesthetically pleasing and modern
+ when i say brainstorm, i mean brainstorm do not code
+
+ THe platform is RestReviv and Thrive, a personal brand dedicate to fibromyalgia  awareness and empoweing users  with resoures and  tools in their  Fibromyalgia and CFS/M as well general health and devleopment
+ it is owned by  a  GP who is also a patient  as seen in the sample message below
+Hello, I'm Dr. Dolly. I'm a GP living with fibromyalgia, and I'm passionate about shedding light on invisible illnesses. I see you, I hear you, and I believe you and we will navigate this journey together. #RestRevive Thrive
+
+it must be colourful and shooting. there arelso social media pages and a youtube channel
+
+
+avoid errors like  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.eslintreact/no-unescaped-entities

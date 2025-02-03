@@ -1,0 +1,60 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "blog_comments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "postId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "blog_posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "publishedAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "blog_posts",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isTrending",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "trendingOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "youtube_videos",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isTrending",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "trendingOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
+} 

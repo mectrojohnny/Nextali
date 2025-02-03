@@ -1,0 +1,35 @@
+[debug] [2024-12-20T04:52:11.195Z] ----------------------------------------------------------------------
+[debug] [2024-12-20T04:52:11.197Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only firestore:indexes
+[debug] [2024-12-20T04:52:11.198Z] CLI Version:   13.29.1
+[debug] [2024-12-20T04:52:11.198Z] Platform:      win32
+[debug] [2024-12-20T04:52:11.198Z] Node Version:  v20.18.0
+[debug] [2024-12-20T04:52:11.198Z] Time:          Fri Dec 20 2024 05:52:11 GMT+0100 (West Africa Standard Time)
+[debug] [2024-12-20T04:52:11.198Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-12-20T04:52:11.270Z] Field ".firestore.indexes" in "firebase.json" is possibly invalid: should be string
+[debug] [2024-12-20T04:52:11.270Z] Field ".firestore" in "firebase.json" is possibly invalid: should be array
+[debug] [2024-12-20T04:52:11.270Z] Field ".firestore" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2024-12-20T04:52:11.274Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-12-20T04:52:11.275Z] > authorizing via signed-in user (dollymediateam@gmail.com)
+[debug] [2024-12-20T04:52:11.275Z] [iam] checking project rerethrive for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
+[debug] [2024-12-20T04:52:11.276Z] Checked if tokens are valid: true, expires at: 1734673913702
+[debug] [2024-12-20T04:52:11.276Z] Checked if tokens are valid: true, expires at: 1734673913702
+[debug] [2024-12-20T04:52:11.277Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/rerethrive:testIamPermissions [none]
+[debug] [2024-12-20T04:52:11.277Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/rerethrive:testIamPermissions x-goog-quota-user=projects/rerethrive
+[debug] [2024-12-20T04:52:11.277Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/rerethrive:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[debug] [2024-12-20T04:52:12.643Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/rerethrive:testIamPermissions 200
+[debug] [2024-12-20T04:52:12.643Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/rerethrive:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'rerethrive'...
+[info] 
+[info] i  deploying firestore 
+[debug] [2024-12-20T04:52:13.057Z] TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received an instance of Array
+    at Object.join (node:path:461:7)
+    at Config.path (C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\config.js:130:45)
+    at prepareIndexes (C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\firestore\prepare.js:17:40)
+    at default_1 (C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\firestore\prepare.js:53:13)
+    at chain (C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:40:15)
+    at deploy (C:\Users\USER\AppData\Roaming\npm\node_modules\firebase-tools\lib\deploy\index.js:100:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: An unexpected error has occurred.
