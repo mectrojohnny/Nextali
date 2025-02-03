@@ -142,7 +142,7 @@ export default function TrendingSection() {
   if (loading) {
     return (
       <div className="min-h-[300px] sm:min-h-[400px] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-[#803C9A]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-[#751731]"></div>
       </div>
     );
   }
@@ -168,16 +168,16 @@ export default function TrendingSection() {
     <section className="relative py-8 sm:py-16 px-3 sm:px-6 bg-gradient-to-br from-gray-50 to-white overflow-hidden">
       <div className="absolute top-0 right-0">
         <div className="relative">
-          <div className="absolute -top-2 -right-2 w-24 h-24 sm:w-32 sm:h-32 bg-[#803C9A]/10 rounded-full blur-2xl"></div>
-          <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-[#FA4B99]/10 rounded-full blur-xl"></div>
-          <div className="relative bg-white/80 backdrop-blur-sm border border-[#803C9A]/10 rounded-lg px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-[#803C9A] shadow-sm">
+          <div className="absolute -top-2 -right-2 w-24 h-24 sm:w-32 sm:h-32 bg-[#751731]/10 rounded-full blur-2xl"></div>
+          <div className="absolute top-0 right-0 w-16 h-16 sm:w-24 sm:h-24 bg-[#F4D165]/10 rounded-full blur-xl"></div>
+          <div className="relative bg-white/80 backdrop-blur-sm border border-[#751731]/10 rounded-lg px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-[#751731] shadow-sm">
             What&apos;s Hot 🔥
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl">
-        <h2 className="text-2xl sm:text-4xl font-bold text-center mb-4 sm:mb-8 bg-gradient-to-r from-[#803C9A] to-[#FA4B99] bg-clip-text text-transparent">
+        <h2 className="text-2xl sm:text-4xl font-bold text-center mb-4 sm:mb-8 bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
           Trending Now
         </h2>
 
@@ -231,7 +231,7 @@ export default function TrendingSection() {
                               target={currentItem?.type === 'youtube' ? '_blank' : '_self'}
                               className="group"
                             >
-                              <h3 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 group-hover:text-[#FA4B99] transition-colors">
+                              <h3 className="text-lg sm:text-2xl font-bold text-white mb-2 sm:mb-4 group-hover:text-[#F4D165] transition-colors">
                                 {currentItem?.title || 'Untitled'}
                               </h3>
                               <p className="text-sm sm:text-base text-white/80 line-clamp-2 sm:line-clamp-3">
@@ -256,7 +256,7 @@ export default function TrendingSection() {
 
               <button
                 onClick={prevSlide}
-                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-12 sm:h-12 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 hover:text-[#803C9A] transition-colors shadow-lg"
+                className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-12 sm:h-12 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 hover:text-[#751731] transition-colors shadow-lg"
                 aria-label="Previous slide"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,7 +265,7 @@ export default function TrendingSection() {
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-12 sm:h-12 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 hover:text-[#803C9A] transition-colors shadow-lg"
+                className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-12 sm:h-12 bg-white/80 hover:bg-white backdrop-blur-sm rounded-full flex items-center justify-center text-gray-800 hover:text-[#751731] transition-colors shadow-lg"
                 aria-label="Next slide"
               >
                 <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -281,7 +281,7 @@ export default function TrendingSection() {
                   onClick={() => setCurrentIndex(index)}
                   className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
                     currentIndex === index 
-                      ? 'bg-[#803C9A] w-4 sm:w-6' 
+                      ? 'bg-[#751731] w-4 sm:w-6' 
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
@@ -292,7 +292,7 @@ export default function TrendingSection() {
 
           {/* Happening Today Sidebar */}
           <div className="lg:w-96">
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-[#803C9A]/10 shadow-lg overflow-hidden">
+            <div className="bg-white/90 backdrop-blur-sm rounded-xl border border-[#751731]/10 shadow-lg overflow-hidden">
               <div className="relative h-48">
                 <Image
                   src={todayItem.mediaUrl || PLACEHOLDER_IMAGE}
@@ -306,11 +306,11 @@ export default function TrendingSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
                 <div className="absolute top-4 left-4">
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#803C9A]/10 shadow-sm">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-sm border border-[#751731]/10 shadow-sm">
                     <span className={`material-icons-outlined text-lg ${
                       todayItem.type === 'live' ? 'text-red-500 animate-pulse' :
-                      todayItem.type === 'event' ? 'text-[#803C9A]' :
-                      'text-[#FA4B99]'
+                      todayItem.type === 'event' ? 'text-[#751731]' :
+                      'text-[#F4D165]'
                     }`}>
                       {todayItem.type === 'live' ? 'live_tv' :
                        todayItem.type === 'event' ? 'event' :
@@ -325,10 +325,10 @@ export default function TrendingSection() {
 
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-semibold bg-gradient-to-r from-[#803C9A] to-[#FA4B99] bg-clip-text text-transparent">
+                  <h3 className="text-xl font-semibold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
                     {todayItem.title}
                   </h3>
-                  <span className="text-sm font-medium text-[#803C9A]">
+                  <span className="text-sm font-medium text-[#751731]">
                     {todayItem.time}
                   </span>
                 </div>
@@ -337,7 +337,7 @@ export default function TrendingSection() {
                 </p>
                 <Link 
                   href={todayItem.link}
-                  className="inline-flex items-center justify-center w-full px-6 py-3 rounded-lg bg-gradient-to-r from-[#803C9A] to-[#FA4B99] text-white font-medium hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
+                  className="inline-flex items-center justify-center w-full px-6 py-3 rounded-lg bg-gradient-to-r from-[#751731] to-[#F4D165] text-white font-medium hover:shadow-lg hover:scale-[1.02] transition-all duration-200"
                 >
                   {todayItem.type === 'live' ? 'Join Live Session' :
                    todayItem.type === 'event' ? 'Join Event' :

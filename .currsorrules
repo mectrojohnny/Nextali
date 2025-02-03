@@ -1,18 +1,32 @@
-colour theme
-
- #803C9A
- #FA4B99
-
- strict typescript checking 
- The design must be responsive and mobile friendly
- The design must be aesthetically pleasing and modern
- when i say brainstorm, i mean brainstorm do not code
-
- THe platform is RestReviv and Thrive, a personal brand dedicate to fibromyalgia  awareness and empoweing users  with resoures and  tools in their  Fibromyalgia and CFS/M as well general health and devleopment
- it is owned by  a  GP who is also a patient  as seen in the sample message below
-Hello, I'm Dr. Dolly. I'm a GP living with fibromyalgia, and I'm passionate about shedding light on invisible illnesses. I see you, I hear you, and I believe you and we will navigate this journey together. #RestRevive Thrive
-
-it must be colourful and shooting. there arelso social media pages and a youtube channel
 
 
-avoid errors like  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.eslintreact/no-unescaped-entities
+start each response with  explicityly with " #Nextali I must not break code or  change  any part of the design or ui element or layout unless explicitly asked to do so,  I will obey this "
+always design mobile first
+for platform information do check inst.txt
+ You must generate a thinking paragraph before you start coding. you must use acheckmark to indicate the rules you are following. 
+ you must follow best practices for design and security 
+Do not change a single design or ui element or layout unless explicitly asked to do so.
+You must always break a task into incremental steps and then implement each step.
+FOr every taks you must take a modularise approach to the problem and components and must not ignore it  and must consider scalabilty and flexibility 
+you must build mobile screens first  and then build desktop screens 
+You must use a checkmark  to indicate the rules you have followed
+all types must be in a single types.ts file 
+all database operations must be done in  firebase_utils file 
+you must check if a substitue or alternative package is available for a library or package and use it if it is available  before installing a new package 
+
+you must not skip the thinking paragraph
+use stepwise forms for all forms with several fields  and you can create a 
+
+when i ask to move a compoent or feature, you must  copy or move the component or feature to the new location and then add the new code to the new location, you must not attempt to recreate  the component or rewrite the code 
+you must always keep your code concise and clean
+when i ask a question or ask you to brainstorm , do not write any code or design or ui element or layout unless explicitly asked to do so .  YOu must do critical think and presnet different ideas and solutions 
+IMPORTANT: 
+you must obey all instructions and not break any of the rules 
+it is very important that you do not break any of the rules 
+you will be punished if you change any of the design or ui element or layout unless explicitly asked to do so 
+you must not define types in individual files, all types must be in a single types.ts file  and imported in the file where they are needed 
+you must not perform  database operations in the component files, all database operations must be done in the firebase_utils file  and imported in the file where they are needed 
+
+firestore is already installed and configured in the project, you must not install it again 
+always check firestore.indexes.json file to see if the indexes are correct and if not, you must correct them 
+also alwyas update firestore.rules and deploy it to firebase 

@@ -1,23 +1,112 @@
 colour theme
 
- #803C9A
- #FA4B99
-
-start all responses with #Akalas
- you must check the codebase for all prompt
- when a question is asked you must brainstorm and respond and only code when the question  asked you to do so
- strict typescript checking 
- The design must be responsive and mobile friendly
- The design must be aesthetically pleasing and modern
- when i say brainstorm, i mean brainstorm do not code
- you must design mobile screens first
- when ask to design the mobile screens for already existing desktop screen you must not alter a single element in the desktop ui
-you must only push to repo when I asked you to do so and ensure you use add .
- THe platform is RestReviv and Thrive, a personal brand dedicate to fibromyalgia  awareness and empoweing users  with resoures and  tools in their  Fibromyalgia and CFS/M as well general health and devleopment
- it is owned by  a  GP who is also a patient  as seen in the sample message below
-Hello, I'm Dr. Dolly. I'm a GP living with fibromyalgia, and I'm passionate about shedding light on invisible illnesses. I see you, I hear you, and I believe you and we will navigate this journey together. #RestRevive Thrive
-
-it must be colourful and shooting. there arelso social media pages and a youtube channel but the focus of the website is  not the medical doctor but the patient
-always escape ' and " with ldquo 
-
-always write the  associated firestore rules and deploy the firestore rules 
+ #F4D165
+#751731
+ 
+ 
+1 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NEXTALI 
+TEAM BRIEF 
+(Treat as confidential (Strictly NDA) ) 
+OVERVIEW 
+Nextali is a technology organization seeking to transforms how 
+Africa entrepreneurs and SMEs operate, grow, and succeed. 
+Through our innovative platforms, research-driven approach, and 
+community-centered ecosystem, we're building Africa's next 
+generation of successful businesses. 
+Mission: 
+Nextali is a technology-driven organization dedicated to 
+empowering African entrepreneurs, startups, and Small-Medium 
+Enterprises (SMEs) through innovative, research and community
+driven solutions, skill development, and comprehensive and 
+impactful business support. 
+Vision: 
+Nextali is a technology-driven organization dedicated to 
+empowering African entrepreneurs, startups, and Small-Medium 
+Enterprises (SMEs) through innovative, research and community
+driven solutions, skill development, and comprehensive and 
+impactful business support.  
+2 
+Core Values: 
+Innovation: We're committed to pioneering solutions that reflect 
+the unique needs and opportunities in Africa. 
+Community: Building community driven solution and a supportive 
+network where knowledge, skills, and success are shared widely. 
+Sustainability: Focusing on solutions that are not only 
+technologically advanced but also environmentally and 
+economically sustainable especially for the African Continent 
+Excellence: Maintaining the highest standards in technology, service 
+delivery, and business practices. 
+Empowerment: Elevating African entrepreneurs to compete on a 
+global stage. 
+Research: Driving progress through data-driven insights and 
+evidence-based solutions that address African challenges. 
+“The world is changing very fast. Big will not beat small 
+anymore. It will be the fast beating the slow." -  Rupert 
+Murdoch” 
+3 
+KEY STRUCTURE 
+Nextali
+ BILL
+ TEA
+ NEP
+ 1.Nextali BIL (Business Innovation and Leadership Lab):  
+Nextali BILL is dedicated to fostering business innovation and skill 
+development for entrepreneurs and SMEs. The flagship product is  
+the Nextali Business  Suite, a comprehensive platform offering a 
+diverse range of tools and  services designed to propel businesses 
+towards growth and success 
+4 
+.2. Nextali TEA (Talent Exchange  and Academy) 
+A dynamic technology and community centered platform within 
+Nextali's ecosystem, designed to foster skill development, 
+knowledge sharing, and innovation among entrepreneurs. TEA 
+integrates contests, an academy for structured learning, and a 
+service exchange, creating a comprehensive environment for 
+growth and collaboration. The flagship product is the skill exchange
+ hub. 
+3. Nextali NEP (Next Entrepreneurs Platform) 
+A visionary platform empowering entrepreneurs and startups 
+through comprehensive support (Grant and Opportunities) , 
+resources, and training. 
+5 
+NOTABLE METRICS 
+Nextali BILL Metrics: 
+• Business Growth: 3000+ businesses using the Business Suite by 
+2025 
+• Efficiency Gains: 40% average improvement in business 
+operations 
+• User Satisfaction: Maintain 4.5/5 star rating on platform tools 
+• Revenue Impact: 30% average revenue increase for active users 
+Nextali TEA Metrics: 
+• Skill Exchange: 5000+ successful skill matches annually 
+• Learning Completion: 75% course completion rate 
+• Skill Application: 60% of learners applying skills within 3 months 
+• Community Growth: 20% monthly active user growth 
+• Expert Engagement: 500+ verified experts on platform 
+6 
+Nextali NEP Metrics: 
+• Startup Success: 70% of supported startups and business 
+surviving past 2 years 
+• Funding Access: $10M+ in funding facilitated in first five years 
+• Mentorship Impact: 1000+ active mentorship relationships 
+• Market Entry: 40% of supported businesses expanding to new 
+markets 
+• Job Creation: 5000+ jobs created through supported businesses 
+Overall Ecosystem Impact:  5 years  overview  
+• Pan-African Reach: Active presence in 15+ African countries 
+• Economic Impact: $100M+ in economic value generated  
+• Community Growth: 100,000+ engaged community members 
+• Innovation Index: 200+ new technologies/solutions developed 
+7 
+• Sustainability Score: 80% of supported businesses achieving 
+profitability 
+8 
