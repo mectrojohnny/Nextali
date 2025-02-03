@@ -1,21 +1,7 @@
 export const cloudinaryConfig = {
   cloudName: 'dg0wv6niu',
-  uploadPreset: 'hAvs2iuOgz-NVtVxUb10QSPPnLs',
+  uploadPreset: 'ml_default',
   apiKey: '914652298777761',
-  maxFileSize: 10 * 1024 * 1024, // 10MB
-  allowedFormats: {
-    image: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'],
-    video: ['mp4', 'webm', 'mov'],
-    raw: ['pdf', 'doc', 'docx', 'txt']
-  },
-  defaultTransformations: {
-    image: {
-      quality: 'auto:best',
-      fetch_format: 'auto',
-      responsive: true,
-      secure: true
-    }
-  }
 };
 
 export const uploadFile = async (file: File): Promise<string> => {
@@ -25,50 +11,39 @@ export const uploadFile = async (file: File): Promise<string> => {
   formData.append('cloud_name', cloudinaryConfig.cloudName);
   
   try {
-    // File size validation
-    if (file.size > cloudinaryConfig.maxFileSize) {
-      throw new Error(`File size exceeds ${cloudinaryConfig.maxFileSize / (1024 * 1024)}MB limit`);
-    }
-
-    // Determine resource type and validate format
+    // Determine resource type based on file type
     let resourceType = 'auto';
-    const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
     
-    if (file.type === 'application/pdf' || cloudinaryConfig.allowedFormats.raw.includes(fileExtension)) {
+    if (file.type === 'application/pdf') {
       resourceType = 'raw';
-    } else if (file.type.startsWith('image/') || cloudinaryConfig.allowedFormats.image.includes(fileExtension)) {
+    } else if (file.type.startsWith('image/')) {
       resourceType = 'image';
-      // Add image optimization parameters
-      formData.append('quality', 'auto:best');
-      formData.append('fetch_format', 'auto');
-      formData.append('responsive', 'true');
-    } else if (file.type.startsWith('video/') || cloudinaryConfig.allowedFormats.video.includes(fileExtension)) {
+    } else if (file.type.startsWith('video/')) {
       resourceType = 'video';
-      // Add video optimization parameters
-      formData.append('quality', 'auto:best');
-    } else {
-      throw new Error('Unsupported file format');
     }
-
-    // Add folder based on resource type
-    formData.append('folder', `nextali/${resourceType}s`);
 
     console.log('Uploading to Cloudinary...', {
       cloudName: cloudinaryConfig.cloudName,
       fileType: file.type,
-      fileSize: `${(file.size / (1024 * 1024)).toFixed(2)}MB`,
+      fileSize: file.size,
       uploadPreset: cloudinaryConfig.uploadPreset,
-      resourceType,
-      folder: `nextali/${resourceType}s`
+      resourceType
     });
+
+    // Add timeout to the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120000); // 120 second timeout
 
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/${resourceType}/upload`,
       {
         method: 'POST',
         body: formData,
+        signal: controller.signal
       }
     );
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const errorData = await response.json();
@@ -79,7 +54,7 @@ export const uploadFile = async (file: File): Promise<string> => {
         fileInfo: {
           name: file.name,
           type: file.type,
-          size: `${(file.size / (1024 * 1024)).toFixed(2)}MB`
+          size: file.size
         }
       });
       throw new Error(errorData.error?.message || `Upload failed: ${response.statusText}`);
@@ -89,13 +64,14 @@ export const uploadFile = async (file: File): Promise<string> => {
     console.log('Upload successful:', {
       url: data.secure_url,
       resourceType,
-      publicId: data.public_id,
-      format: data.format,
-      size: `${(data.bytes / (1024 * 1024)).toFixed(2)}MB`
+      publicId: data.public_id
     });
 
     return data.secure_url;
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error('Upload timed out after 120 seconds. Please try again.');
+    }
     console.error('Error uploading to Cloudinary:', error);
     throw error;
   }

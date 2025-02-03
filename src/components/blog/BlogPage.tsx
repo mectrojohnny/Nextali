@@ -8,19 +8,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BlogCard from './BlogCard';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { BlogCategory, BLOG_CATEGORIES } from '@/types/types';
 
-export const categories = [
-  'All',
-  'Fibromyalgia',
-  'CFS/ME',
-  'Wellness',
-  'Research',
-  'Lifestyle',
-  'Success Stories',
-] as const;
+// Use the type directly from types.ts
+type CategoryWithAll = BlogCategory | 'All';
+const allCategories: CategoryWithAll[] = ['All', ...BLOG_CATEGORIES];
 
 interface BlogPageProps {
-  initialCategory?: string;
+  initialCategory?: CategoryWithAll;
   initialTag?: string;
   initialSearch?: string;
 }
@@ -34,7 +29,7 @@ export default function BlogPage({
   const searchParams = useSearchParams();
   
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryWithAll>(initialCategory);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -112,11 +107,11 @@ export default function BlogPage({
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-8 sm:mb-16"
           >
-            <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-[#803C9A] to-[#FF5757] bg-clip-text text-transparent mb-2 sm:mb-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent mb-4">
               Our Blog
             </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4 sm:px-0">
-              Discover insights, stories, and expert advice on living well with fibromyalgia and CFS/ME
+              Discover insights, stories, and expert advice on empowering African businesses
             </p>
           </motion.div>
 
@@ -130,7 +125,7 @@ export default function BlogPage({
                   placeholder="Search articles..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 pl-9 sm:pl-10 text-sm sm:text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#803C9A] focus:border-transparent"
+                  className="w-full px-3 sm:px-4 py-1.5 sm:py-2 pl-9 sm:pl-10 text-sm sm:text-base border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-transparent"
                 />
                 <span className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 material-icons-outlined text-gray-400 text-base sm:text-lg">
                   search
@@ -139,13 +134,13 @@ export default function BlogPage({
 
               {/* Categories */}
               <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
-                {categories.map((category) => (
+                {allCategories.map((category) => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium transition-all ${
                       selectedCategory === category
-                        ? 'bg-gradient-to-r from-[#803C9A] to-[#FF5757] text-white'
+                        ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
@@ -162,7 +157,7 @@ export default function BlogPage({
               <p>{error}</p>
               <button
                 onClick={() => window.location.reload()}
-                className="mt-4 px-4 py-2 bg-[#803C9A] text-white rounded-lg hover:bg-[#6a3180] transition-colors"
+                className="mt-4 px-4 py-2 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:opacity-90 transition-colors"
               >
                 Try Again
               </button>
@@ -172,7 +167,7 @@ export default function BlogPage({
           {/* Blog Posts Grid */}
           {loading ? (
             <div className="flex justify-center items-center h-48 sm:h-64">
-              <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-[#803C9A]"></div>
+              <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-t-2 border-b-2 border-[#751731]"></div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 px-4 sm:px-0">

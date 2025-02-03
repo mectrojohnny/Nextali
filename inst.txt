@@ -127,3 +127,9 @@ CLOUDINARY_URL=cloudinary://914652298777761:***************************@dg0wv6ni
 
 
 updat ehte cloudinary credentials  and also let me know if  i  need to do further confiuration on cloudinary
+
+
+it shoudl get the autor nad avatar fro mteh logged user
+
+add Mercytaye30@gmail.com to the admin 
+also 

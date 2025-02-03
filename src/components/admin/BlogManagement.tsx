@@ -15,7 +15,8 @@ import {
   Timestamp
 } from 'firebase/firestore';
 import { db, auth } from '@/lib/firebase';
-import { uploadImage } from '@/lib/cloudinary';
+import { uploadFile } from '@/lib/cloudinary';
+import { BlogCategory, BLOG_CATEGORIES } from '@/types/types';
 
 // Dynamic import of the rich text editor
 const Editor = dynamic(() => import('@/components/Editor'), { 
@@ -44,7 +45,7 @@ interface BlogPost {
   content: string;
   excerpt: string;
   featuredImage?: string;
-  category: string[];
+  category: BlogCategory[];
   tags: string[];
   status: 'draft' | 'published';
   publishedAt: Date;
@@ -55,21 +56,15 @@ interface BlogPost {
   slug: string;
 }
 
-const CATEGORIES = [
-  'Fibromyalgia',
-  'CFS/ME',
-  'Wellness',
-  'Research',
-  'Lifestyle',
-  'Success Stories',
-];
+// Use the categories from types.ts
+const CATEGORIES = BLOG_CATEGORIES;
 
 const initialFormData = {
   title: '',
   content: '',
   excerpt: '',
   featuredImage: '',
-  category: [] as string[],
+  category: [] as BlogCategory[],
   tags: [] as string[],
   status: 'draft' as 'draft' | 'published',
 };
@@ -111,15 +106,19 @@ export default function BlogManagement() {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     if (file.size > 5 * 1024 * 1024) {
       alert('Image size should be less than 5MB');
+      if (e.target) e.target.value = '';
       return;
     }
 
     if (!file.type.startsWith('image/')) {
       alert('Please select an image file');
+      if (e.target) e.target.value = '';
       return;
     }
 
@@ -129,25 +128,23 @@ export default function BlogManagement() {
       
       // Upload to Cloudinary
       console.log('Starting image upload...');
-      const imageUrl = await uploadImage(file);
+      const imageUrl = await uploadFile(file);
       console.log('Image uploaded successfully:', imageUrl);
 
       if (!imageUrl || !imageUrl.startsWith('http')) {
         throw new Error('Invalid image URL returned from upload');
       }
 
-      // Save to Firestore
-      console.log('Saving to gallery...');
-      const docRef = await addDoc(collection(db, 'uploaded_images'), {
+      // Save to gallery
+      await addDoc(collection(db, 'uploaded_images'), {
         url: imageUrl,
         title: file.name,
         uploadedAt: Timestamp.now(),
         fileType: file.type,
         fileSize: file.size,
       });
-      console.log('Saved to gallery:', docRef.id);
 
-      // Update form
+      // Update form with the new image URL
       setFormData(prev => ({ ...prev, featuredImage: imageUrl }));
       
     } catch (error) {
@@ -165,6 +162,7 @@ export default function BlogManagement() {
 
   const handleImageError = () => {
     setImageError(true);
+    setUploading(false);
   };
 
   const handleGallerySelect = (url: string) => {
@@ -196,8 +194,8 @@ export default function BlogManagement() {
         publishedAt: editingPost?.publishedAt || Timestamp.now(),
         updatedAt: Timestamp.now(),
         author: {
-          name: "Dr. Dolly",
-          avatar: "/images/avatars/drdolly.jpg"
+          name: user.displayName || user.email?.split('@')[0] || 'Anonymous',
+          avatar: user.photoURL || '/images/avatars/default.jpg'
         }
       };
 
@@ -254,7 +252,7 @@ export default function BlogManagement() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#751731]"></div>
       </div>
     );
   }
@@ -262,31 +260,31 @@ export default function BlogManagement() {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Blog Posts</h1>
-            <button
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">Blog Posts</h1>
+        <button
           onClick={() => setShowEditor(!showEditor)}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          className="px-4 py-2 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
         >
           {showEditor ? 'View All Posts' : 'Create New Post'}
-            </button>
+        </button>
       </div>
 
-        {showEditor ? (
-        <div className="bg-white rounded-lg shadow p-6">
+      {showEditor ? (
+        <div className="bg-white rounded-lg shadow-lg border border-[#751731]/10 p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Title</label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
-                    required
-                  />
-                </div>
+              <label className="block text-sm font-medium text-[#751731]">Title</label>
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-[#751731]/30"
+                required
+              />
+            </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Featured Image</label>
+              <label className="block text-sm font-medium text-[#751731]">Featured Image</label>
               <div className="mt-2 space-y-4">
                 <div className="flex items-center gap-4">
                   <input
@@ -297,13 +295,13 @@ export default function BlogManagement() {
                       file:mr-4 file:py-2 file:px-4
                       file:rounded-full file:border-0
                       file:text-sm file:font-semibold
-                      file:bg-purple-50 file:text-purple-700
-                      hover:file:bg-purple-100"
+                      file:bg-[#751731]/5 file:text-[#751731]
+                      hover:file:bg-[#751731]/10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowGallery(true)}
-                    className="px-4 py-2 text-sm font-medium text-purple-700 bg-purple-50 rounded-full hover:bg-purple-100"
+                    className="px-4 py-2 text-sm font-medium text-[#751731] bg-[#751731]/5 rounded-full hover:bg-[#751731]/10 transition-colors duration-200"
                   >
                     Browse Gallery
                   </button>
@@ -326,8 +324,8 @@ export default function BlogManagement() {
                   </div>
                 )}
                 {uploading && (
-                  <div className="flex items-center space-x-2 text-sm text-purple-600">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-purple-600 border-t-transparent"></div>
+                  <div className="flex items-center space-x-2 text-sm text-[#751731]">
+                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-[#751731] border-t-transparent"></div>
                     <span>Uploading image...</span>
                   </div>
                 )}
@@ -342,100 +340,100 @@ export default function BlogManagement() {
               />
             )}
 
-                <div>
-              <label className="block text-sm font-medium text-gray-700">Categories</label>
+            <div>
+              <label className="block text-sm font-medium text-[#751731]">Categories</label>
               <div className="mt-2 flex flex-wrap gap-2">
                 {CATEGORIES.map((category) => (
-                      <button
-                        key={category}
-                        type="button"
-                        onClick={() => {
-                          const newCategories = formData.category.includes(category)
-                            ? formData.category.filter((c) => c !== category)
-                            : [...formData.category, category];
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => {
+                      const newCategories = formData.category.includes(category)
+                        ? formData.category.filter((c) => c !== category)
+                        : [...formData.category, category];
                       setFormData(prev => ({ ...prev, category: newCategories }));
-                        }}
-                    className={`px-3 py-1 rounded-full text-sm ${
-                          formData.category.includes(category)
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}
-                      >
-                        {category}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                    }}
+                    className={`px-3 py-1 rounded-full text-sm transition-all duration-200 ${
+                      formData.category.includes(category)
+                        ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md'
+                        : 'bg-[#751731]/5 text-[#751731] hover:bg-[#751731]/10'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-                <div>
-              <label className="block text-sm font-medium text-gray-700">Tags</label>
-                  <input
-                    type="text"
-                    value={formData.tags.join(', ')}
-                    onChange={(e) => {
+            <div>
+              <label className="block text-sm font-medium text-[#751731]">Tags</label>
+              <input
+                type="text"
+                value={formData.tags.join(', ')}
+                onChange={(e) => {
                   const tags = e.target.value.split(',').map(tag => tag.trim()).filter(Boolean);
                   setFormData(prev => ({ ...prev, tags }));
-                    }}
-                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                }}
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-[#751731]/30"
                 placeholder="Enter tags separated by commas"
-                  />
-                </div>
+              />
+            </div>
 
-                <div>
-              <label className="block text-sm font-medium text-gray-700">Excerpt</label>
-                  <textarea
-                    value={formData.excerpt}
+            <div>
+              <label className="block text-sm font-medium text-[#751731]">Excerpt</label>
+              <textarea
+                value={formData.excerpt}
                 onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
-                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
-                    rows={3}
-                    required
-                  />
-                </div>
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-[#751731]/30"
+                rows={3}
+                required
+              />
+            </div>
 
-                <div>
-              <label className="block text-sm font-medium text-gray-700">Content</label>
+            <div>
+              <label className="block text-sm font-medium text-[#751731]">Content</label>
               <div className="mt-1">
-                  <Editor
-                    value={formData.content}
+                <Editor
+                  value={formData.content}
                   onChange={(content) => setFormData(prev => ({ ...prev, content }))}
-                  />
+                />
               </div>
-                </div>
+            </div>
 
-                <div>
-              <label className="block text-sm font-medium text-gray-700">Status</label>
-                  <select
-                    value={formData.status}
+            <div>
+              <label className="block text-sm font-medium text-[#751731]">Status</label>
+              <select
+                value={formData.status}
                 onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
-                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
-                  >
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                  </select>
-                </div>
+                className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-[#751731]/30"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
 
             <div className="flex justify-end space-x-4">
               <button
                 type="button"
                 onClick={resetForm}
-                className="px-4 py-2 text-gray-700 hover:text-gray-900"
+                className="px-4 py-2 text-[#751731] hover:text-[#751731]/80 transition-colors duration-200"
               >
                 Cancel
               </button>
-                  <button
-                    type="submit"
-                    disabled={uploading}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+              <button
+                type="submit"
+                disabled={uploading}
+                className="px-4 py-2 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
               >
                 {uploading ? 'Saving...' : editingPost ? 'Update Post' : 'Create Post'}
-                  </button>
-                </div>
-              </form>
+              </button>
             </div>
+          </form>
+        </div>
       ) : (
         <div className="grid gap-6">
           {posts.map((post) => (
-            <div key={post.id} className="bg-white p-6 rounded-lg shadow">
+            <div key={post.id} className="bg-white p-6 rounded-lg shadow-lg border border-[#751731]/10 hover:shadow-xl transition-all duration-300">
               <div className="flex gap-6">
                 {post.featuredImage && isValidImageUrl(post.featuredImage) && (
                   <div className="relative flex-shrink-0 w-48 h-32 overflow-hidden rounded-lg border border-gray-200">
@@ -450,11 +448,11 @@ export default function BlogManagement() {
                 )}
                 <div className="flex-grow flex justify-between">
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
+                    <h2 className="text-xl font-semibold text-[#751731]">{post.title}</h2>
                     <p className="text-gray-600 mt-2">{post.excerpt}</p>
                     <div className="mt-2 flex gap-2">
                       {post.category.map((cat) => (
-                        <span key={cat} className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                        <span key={cat} className="px-2 py-1 bg-[#751731]/5 text-[#751731] rounded-full text-sm">
                           {cat}
                         </span>
                       ))}
@@ -463,13 +461,13 @@ export default function BlogManagement() {
                   <div className="flex space-x-4">
                     <button
                       onClick={() => handleEdit(post)}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-[#751731] hover:text-[#F4D165] transition-colors duration-200"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(post)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 hover:text-red-800 transition-colors duration-200"
                     >
                       Delete
                     </button>

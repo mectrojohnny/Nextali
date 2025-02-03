@@ -1,22 +1,9 @@
+'use client';
+
 import { Suspense } from 'react';
 import BlogPage from '@/components/blog/BlogPage';
-import { Metadata } from 'next';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-
-export const metadata: Metadata = {
-  title: 'Blog | Rest Revive Thrive',
-  description: 'Discover insights, stories, and expert advice on living well with fibromyalgia and CFS/ME',
-  openGraph: {
-    title: 'Blog | Rest Revive Thrive',
-    description: 'Discover insights, stories, and expert advice on living well with fibromyalgia and CFS/ME',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Blog | Rest Revive Thrive',
-    description: 'Discover insights, stories, and expert advice on living well with fibromyalgia and CFS/ME',
-  },
-};
+import { BlogCategory } from '@/types/types';
 
 function LoadingSpinner() {
   return (
@@ -28,7 +15,7 @@ function LoadingSpinner() {
 
 interface PostsPageProps {
   searchParams?: {
-    category?: string;
+    category?: BlogCategory | 'All';
     tag?: string;
     q?: string;
   };
@@ -37,13 +24,15 @@ interface PostsPageProps {
 export default function PostsPage({ searchParams }: PostsPageProps) {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<LoadingSpinner />}>
-        <BlogPage 
-          initialCategory={searchParams?.category}
-          initialTag={searchParams?.tag}
-          initialSearch={searchParams?.q}
-        />
-      </Suspense>
+      <div className="w-full">
+        <Suspense fallback={<LoadingSpinner />}>
+          <BlogPage 
+            initialCategory={searchParams?.category}
+            initialTag={searchParams?.tag}
+            initialSearch={searchParams?.q}
+          />
+        </Suspense>
+      </div>
     </ErrorBoundary>
   );
 } 

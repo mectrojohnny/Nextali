@@ -17,7 +17,7 @@ import ResourcesManagement from './ResourcesManagement';
 
 type AdminSection = 'posts' | 'community' | 'comments' | 'analytics' | 'trending' | 'social' | 'intro' | 'today' | 'resources';
 
-const ADMIN_EMAILS = ['akalagborojohn@gmail.com', 'nextalihq@gmail.com'];
+const ADMIN_EMAILS = ['akalagborojohn@gmail.com', 'nextalihq@gmail.com', 'Mercytaye30@gmail.com', 'estherene63@gmail.com'];
 
 export default function AdminDashboard() {
   const router = useRouter();

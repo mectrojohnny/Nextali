@@ -5,7 +5,9 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth != null && 
         (request.auth.token.email == 'akalagborojohn@gmail.com' || 
-         request.auth.token.email == 'nextalihq@gmail.com');
+         request.auth.token.email == 'nextalihq@gmail.com' ||
+         request.auth.token.email == 'Mercytaye30@gmail.com' ||
+         request.auth.token.email == 'estherene63@gmail.com');
     }
 
     // Resources collection
