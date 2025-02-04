@@ -129,7 +129,7 @@ const TestimonialsSection = () => {
             href="/book-consultation"
             className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:shadow-lg transition-all duration-300 text-base sm:text-lg font-medium group"
           >
-            Start Your Success Story Today
+            Contact Us for Support / Partnership
             <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
           </a>
           <p className="text-sm sm:text-base text-gray-400">

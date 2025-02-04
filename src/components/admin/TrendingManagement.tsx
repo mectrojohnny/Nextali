@@ -11,8 +11,7 @@ import {
   doc, 
   addDoc,
   updateDoc,
-  Timestamp,
-  where
+  Timestamp
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { FaYoutube, FaComments, FaBlog, FaNewspaper, FaBullhorn } from 'react-icons/fa';
@@ -94,7 +93,7 @@ export default function TrendingManagement() {
         order: doc.data().trendingOrder,
         author: {
           name: doc.data().author?.name || 'Anonymous',
-          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.jpg')
+          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.svg')
         },
       }));
 
@@ -138,7 +137,7 @@ export default function TrendingManagement() {
         order: doc.data().trendingOrder,
         author: {
           name: doc.data().author?.name || 'Anonymous',
-          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.jpg')
+          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.svg')
         },
       }));
 
@@ -159,7 +158,7 @@ export default function TrendingManagement() {
         order: doc.data().trendingOrder,
         author: {
           name: doc.data().author?.name || 'Anonymous',
-          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.jpg')
+          avatar: getValidImageSrc(doc.data().author?.avatar || '/images/placeholder.svg')
         },
       }));
 
@@ -524,7 +523,7 @@ export default function TrendingManagement() {
                   className="object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/images/placeholder.jpg';
+                    target.src = '/images/placeholder.svg';
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -541,13 +540,13 @@ export default function TrendingManagement() {
                 <div className="flex items-center space-x-3 mb-3">
                   <div className="relative w-8 h-8 rounded-full overflow-hidden">
                     <Image
-                      src={getValidImageSrc(item.author?.avatar || '/images/placeholder.jpg')}
+                      src={getValidImageSrc(item.author?.avatar || '/images/placeholder.svg')}
                       alt={item.author?.name || 'Author'}
                       fill
                       className="object-cover"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = '/images/placeholder.jpg';
+                        target.src = '/images/placeholder.svg';
                       }}
                     />
                   </div>

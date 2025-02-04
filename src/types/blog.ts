@@ -18,6 +18,7 @@ export interface BlogPost {
     role?: string;
     bio?: string;
     socialLink?: string;
+    uid?: string;
   };
   layout: 'classic' | 'modern' | 'minimal' | 'magazine';
   isTrending?: boolean;
@@ -38,6 +39,15 @@ export interface BlogFormData {
   layout: BlogLayout;
   isTrending?: boolean;
   trendingOrder?: number;
+  author?: {
+    name: string;
+    avatar: string;
+    email?: string;
+    role?: string;
+    bio?: string;
+    socialLink?: string;
+    uid?: string;
+  };
 }
 
 export const BLOG_CATEGORIES = [

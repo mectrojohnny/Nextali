@@ -1,5 +1,5 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { getFirestore, Firestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { 
   getAuth, 
   Auth, 
@@ -12,7 +12,17 @@ import {
 import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { getAnalytics, Analytics } from 'firebase/analytics';
 
-const firebaseConfig = {
+interface FirebaseConfig {
+  apiKey?: string;
+  authDomain?: string;
+  projectId?: string;
+  storageBucket?: string;
+  messagingSenderId?: string;
+  appId?: string;
+  measurementId?: string;
+}
+
+const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -22,12 +32,23 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Log Firebase configuration (without sensitive data)
-console.log('Firebase Config:', {
-  authDomain: firebaseConfig.authDomain,
-  projectId: firebaseConfig.projectId,
-  storageBucket: firebaseConfig.storageBucket,
-});
+// Enhanced config validation
+const validateConfig = () => {
+  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'] as const;
+  const missingFields = requiredFields.filter(field => !firebaseConfig[field]);
+  
+  if (missingFields.length > 0) {
+    console.error('Missing required Firebase configuration fields:', missingFields);
+    throw new Error(`Missing required Firebase configuration: ${missingFields.join(', ')}`);
+  }
+  
+  console.log('Firebase Config Validation:', {
+    authDomain: firebaseConfig.authDomain,
+    projectId: firebaseConfig.projectId,
+    storageBucket: firebaseConfig.storageBucket,
+    configComplete: true
+  });
+};
 
 let app: FirebaseApp;
 let db: Firestore;
@@ -36,18 +57,48 @@ let storage: FirebaseStorage;
 let analytics: Analytics | undefined;
 
 try {
+  console.log('Starting Firebase initialization...');
+  validateConfig();
+
   // Initialize Firebase
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  if (getApps().length === 0) {
+    console.log('Initializing new Firebase app...');
+    app = initializeApp(firebaseConfig);
+  } else {
+    console.log('Using existing Firebase app...');
+    app = getApps()[0];
+  }
+
+  // Initialize Firestore with debugging
+  console.log('Initializing Firestore...');
   db = getFirestore(app);
   
-  // Initialize Auth with IndexedDB support
+  // Enable offline persistence for Firestore
+  if (typeof window !== 'undefined') {
+    enableIndexedDbPersistence(db)
+      .then(() => {
+        console.log('Firestore offline persistence enabled');
+      })
+      .catch((err) => {
+        if (err.code === 'failed-precondition') {
+          console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
+        } else if (err.code === 'unimplemented') {
+          console.warn('The current browser does not support persistence.');
+        } else {
+          console.error('Error enabling Firestore persistence:', err);
+        }
+      });
+  }
+  
+  // Initialize Auth with enhanced error handling
   if (typeof window !== 'undefined') {
     try {
+      console.log('Initializing Auth with IndexedDB persistence...');
       auth = initializeAuth(app, {
         persistence: [indexedDBLocalPersistence, browserLocalPersistence],
         popupRedirectResolver: browserPopupRedirectResolver,
       });
-      console.log('Firebase Auth initialized with IndexedDB persistence');
+      console.log('Firebase Auth initialized successfully with IndexedDB persistence');
     } catch (error) {
       console.warn('Failed to initialize with IndexedDB, falling back to default:', error);
       auth = getAuth(app);
@@ -58,25 +109,37 @@ try {
 
   storage = getStorage(app);
 
-  // Set persistence to LOCAL
+  // Set persistence with better error handling
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
       console.log('Firebase Auth persistence set to LOCAL');
     })
     .catch((error) => {
-      console.error('Error setting auth persistence:', error);
-      // Fallback to session persistence if local fails
+      console.error('Detailed persistence error:', {
+        code: error.code,
+        message: error.message,
+        stack: error.stack
+      });
       console.log('Falling back to default persistence');
     });
 
-  // Only initialize analytics on the client side
+  // Initialize analytics with error handling
   if (typeof window !== 'undefined') {
-    analytics = getAnalytics(app);
+    try {
+      analytics = getAnalytics(app);
+      console.log('Analytics initialized successfully');
+    } catch (error) {
+      console.warn('Failed to initialize analytics:', error);
+    }
   }
 
-  console.log('Firebase initialized successfully');
+  console.log('Firebase initialization completed successfully');
 } catch (error) {
-  console.error('Error initializing Firebase:', error);
+  console.error('Critical error during Firebase initialization:', {
+    error,
+    message: error instanceof Error ? error.message : 'Unknown error',
+    stack: error instanceof Error ? error.stack : undefined
+  });
   throw error;
 }
 

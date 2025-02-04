@@ -196,6 +196,9 @@ export default function Header() {
             <Link href="/resources" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
               Resources
             </Link>
+            <Link href="/events" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
+              Events
+            </Link>
             <Link href="/community" className="text-gray-700 hover:text-[#751731] px-3 py-2 text-base font-medium">
               Community
             </Link>
@@ -305,11 +308,23 @@ export default function Header() {
         className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white border-t border-gray-100 shadow-lg`}
         onClick={() => setIsOpen(false)}
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <Link href="/resources" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+        <div className="px-2 pt-2 pb-3 space-y-1">
+          <Link
+            href="/resources"
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#751731] hover:bg-[#751731]/5"
+          >
             Resources
           </Link>
-          <Link href="/community" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">
+          <Link
+            href="/events"
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#751731] hover:bg-[#751731]/5"
+          >
+            Events
+          </Link>
+          <Link
+            href="/community"
+            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-[#751731] hover:bg-[#751731]/5"
+          >
             Community
           </Link>
           <Link href="/posts" className="text-gray-700 hover:text-[#751731] block px-4 py-2.5 text-lg font-medium rounded-md active:bg-gray-50">

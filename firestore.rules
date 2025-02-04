@@ -2,12 +2,62 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
     function isAdmin() {
-      return request.auth != null && 
-        (request.auth.token.email == 'akalagborojohn@gmail.com' || 
+      return isAuthenticated() && 
+        (request.auth.token.email == 'akalagborojohn@gmail.com' ||
          request.auth.token.email == 'nextalihq@gmail.com' ||
          request.auth.token.email == 'Mercytaye30@gmail.com' ||
          request.auth.token.email == 'estherene63@gmail.com');
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Blog posts rules
+    match /blog_posts/{postId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // Events rules
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // YouTube videos rules
+    match /youtube_videos/{videoId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Admin users rules
+    match /admin_users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update, delete: if isOwner(userId) || isAdmin();
+    }
+
+    // Uploaded images
+    match /uploaded_images/{imageId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
     }
 
     // Resources collection
@@ -20,20 +70,6 @@ service cloud.firestore {
         (resource.data.userId == request.auth.uid || isAdmin());  // User can update/delete their own resources, admin can manage all
     }
 
-    match /blog_posts/{post} {
-      allow read: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
-      
-      match /comments/{comment} {
-        allow read: if true;
-        allow create: if request.auth != null;
-        allow update, delete: if request.auth != null && 
-          (request.auth.uid == resource.data.userId || isAdmin());
-      }
-    }
-
     match /blog_comments/{comment} {
       allow read: if true;
       allow create: if request.auth != null && 
@@ -42,13 +78,6 @@ service cloud.firestore {
         request.resource.data.content.size() <= 1000 &&
         request.resource.data.postId is string;
       allow update, delete: if false;
-    }
-
-    match /youtube_videos/{video} {
-      allow read: if true;
-      allow create: if isAdmin();
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
     }
 
     match /news/{item} {
@@ -139,6 +168,16 @@ service cloud.firestore {
         request.resource.data.email is string &&
         request.resource.data.email == request.auth.token.email;  // Email must match auth token
       allow delete: if false;  // Don't allow profile deletion
+    }
+
+    // Waitlist collection
+    match /waitlist/{document=**} {
+      allow read: if false;
+      allow write: if true 
+        && request.resource.data.keys().hasAll(['email', 'timestamp', 'source'])
+        && request.resource.data.email is string
+        && request.resource.data.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$')
+        && request.resource.data.source == 'suite_landing';
     }
 
     // Default deny all

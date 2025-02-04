@@ -12,7 +12,7 @@ import CommentModeration from './CommentModeration';
 import TrendingManagement from './TrendingManagement';
 import SocialMediaManagement from './SocialMediaManagement';
 import IntroVideoManagement from './IntroVideoManagement';
-import TodayEventManagement from './TodayEventManagement';
+import EventManagement from './EventManagement';
 import ResourcesManagement from './ResourcesManagement';
 
 type AdminSection = 'posts' | 'community' | 'comments' | 'analytics' | 'trending' | 'social' | 'intro' | 'today' | 'resources';
@@ -87,7 +87,7 @@ export default function AdminDashboard() {
       items: [
         { id: 'posts', label: 'Blog Management', icon: 'article' },
         { id: 'trending', label: 'Trending Content', icon: 'trending_up' },
-        { id: 'today', label: "Today's Updates", icon: 'today' },
+        { id: 'today', label: "Event Management", icon: 'event' },
         { id: 'resources', label: 'Resources', icon: 'library_books' }
       ]
     },
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
             <div className="relative">
               {activeSection === 'posts' && <BlogManagement />}
               {activeSection === 'trending' && <TrendingManagement />}
-              {activeSection === 'today' && <TodayEventManagement />}
+              {activeSection === 'today' && <EventManagement />}
               {activeSection === 'community' && <CommunityManagement />}
               {activeSection === 'comments' && <CommentModeration />}
               {activeSection === 'social' && <SocialMediaManagement />}

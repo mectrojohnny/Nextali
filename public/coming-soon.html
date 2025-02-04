@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="300"> <!-- Auto refresh every 5 minutes -->
+    <title>Coming Soon - Nextali Suite</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary-color: #751731;
+            --secondary-color: #F4D165;
+            --text-color: #FFFFFF;
+            --dark-text: #2D0914;
+            --light-bg: rgba(244, 209, 101, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), #4A0F1F);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2.5rem;
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            background: rgba(117, 23, 49, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--secondary-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--secondary-color), #FFFFFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .email-form {
+            margin-top: 3rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        input[type="email"] {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--dark-text);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input[type="email"]::placeholder {
+            color: rgba(117, 23, 49, 0.6);
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: #F7DC89;
+            box-shadow: 0 4px 12px rgba(244, 209, 101, 0.3);
+        }
+
+        .social-links {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .social-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(244, 209, 101, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 209, 101, 0.2);
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(244, 209, 101, 0.15);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+                margin: 1rem;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+
+            input[type="email"] {
+                min-width: 100%;
+            }
+
+            .email-form {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        .message {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .message.success {
+            display: block;
+            background: rgba(244, 209, 101, 0.2);
+            color: var(--secondary-color);
+            border: 1px solid var(--secondary-color);
+        }
+
+        .message.error {
+            display: block;
+            background: rgba(220, 38, 38, 0.1);
+            color: #DC2626;
+            border: 1px solid #DC2626;
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="container">
+        <img src="/logo.png" alt="Nextali Logo" class="logo">
+        <h1>Nextali Suite Coming Soon</h1>
+        <p>We're building something amazing! Our suite of innovative tech-driven business solutions for startups, SMEs, and entrepreneurs is almost ready. Be the first to know when we launch.</p>
+        
+        <div class="email-form">
+            <input type="email" id="emailInput" placeholder="Enter your email for early access">
+            <button id="submitBtn" onclick="submitEmail()">
+                Notify Me
+                <span class="loading" style="display: none;"></span>
+            </button>
+            <div id="message" class="message"></div>
+        </div>
+
+        <div class="social-links">
+            <a href="https://twitter.com/nextali" target="_blank" aria-label="Twitter">𝕏</a>
+            <a href="https://linkedin.com/company/nextali" target="_blank" aria-label="LinkedIn">in</a>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "nextali.firebaseapp.com",
+            projectId: "nextali",
+            storageBucket: "nextali.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Email validation function
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        // Submit email function
+        async function submitEmail() {
+            const emailInput = document.getElementById('emailInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const message = document.getElementById('message');
+            const loading = submitBtn.querySelector('.loading');
+            
+            const email = emailInput.value.trim();
+
+            // Reset message
+            message.className = 'message';
+            message.textContent = '';
+
+            if (!isValidEmail(email)) {
+                message.textContent = 'Please enter a valid email address';
+                message.className = 'message error';
+                return;
+            }
+
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            loading.style.display = 'inline-block';
+
+            try {
+                // Check if email already exists
+                const emailCheck = await db.collection('waitlist')
+                    .where('email', '==', email)
+                    .get();
+
+                if (!emailCheck.empty) {
+                    message.textContent = 'This email is already on the waitlist!';
+                    message.className = 'message error';
+                    return;
+                }
+
+                // Add to waitlist
+                await db.collection('waitlist').add({
+                    email: email,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    source: 'suite_landing'
+                });
+
+                // Success message
+                message.textContent = 'Thank you! You\'re on the waitlist. We\'ll notify you when we launch.';
+                message.className = 'message success';
+                emailInput.value = '';
+
+            } catch (error) {
+                console.error('Error:', error);
+                message.textContent = 'Something went wrong. Please try again later.';
+                message.className = 'message error';
+            } finally {
+                // Re-enable button and hide loading
+                submitBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 10 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 20 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        createParticles();
+    </script>
+</body>
+</html> 

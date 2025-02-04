@@ -8,9 +8,9 @@ const Footer = () => {
   return (
     <footer className="bg-gradient-to-b from-white to-[#751731]/5">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-8">
           {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-4">
+          <div className="col-span-2 md:col-span-4">
             <div className="flex items-center mb-4">
               <div className="relative w-12 h-12 rounded-full bg-white overflow-hidden">
                 <Image

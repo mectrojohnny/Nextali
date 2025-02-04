@@ -17,21 +17,21 @@ export default function HeroSection() {
       image: '/1.jpg', 
       url: 'https://suite.nextali.com', 
       alt: 'Nextali Business Suite',
-      message: 'Get more profit with  ou Business Tools',
+      message: 'Get more profit with  our Business Tools',
       linkText: 'Visit Business Suite →'
     },
     { 
       image: '/2.jpg', 
       url: 'https://exchangehub.nextali.com', 
       alt: 'Nextali Exchange Hub',
-      message: 'Exchange Skills  & Sevices ',
+      message: 'Exchange Skills  & Services ',
       linkText: 'Explore Exchange Hub →'
     },
     { 
       image: '/3.jpg', 
       url: 'https://nextentrepreneur.org', 
       alt: 'Next Entrepreneur Platform',
-      message: 'Empower Your Journey',
+      message: ' Access to Training and Grants',
       linkText: 'Join NEP Platform →'
     }
   ];

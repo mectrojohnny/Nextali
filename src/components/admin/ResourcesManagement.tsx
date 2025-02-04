@@ -25,6 +25,8 @@ const RESOURCE_CATEGORIES = [
   'Other'
 ] as const;
 
+type ResourceCategory = typeof RESOURCE_CATEGORIES[number];
+
 export default function ResourcesManagement() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +41,7 @@ export default function ResourcesManagement() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    category: RESOURCE_CATEGORIES[0],
+    category: RESOURCE_CATEGORIES[0] as ResourceCategory,
     tags: '',
     isDownloadable: true
   });
@@ -58,7 +60,7 @@ export default function ResourcesManagement() {
       setFormData({
         title: editingResource.title,
         description: editingResource.description,
-        category: editingResource.category,
+        category: editingResource.category as ResourceCategory,
         tags: editingResource.tags?.join(', ') || '',
         isDownloadable: editingResource.isDownloadable
       });
@@ -158,23 +160,29 @@ export default function ResourcesManagement() {
 
     try {
       const resourceData = {
-        ...formData,
-        userId: user.uid,
-        userEmail: user.email,
-        fileUrl: uploadStatus.file.url,
-        imageUrl: uploadStatus.thumbnail.url,
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
         tags: formData.tags.split(',').map(tag => tag.trim()),
-        updatedAt: new Date().toISOString(),
+        isDownloadable: formData.isDownloadable,
+        userId: user.uid,
+        userEmail: user.email || '',
+        fileUrl: uploadStatus.file.url,
+        imageUrl: uploadStatus.thumbnail.url || '',
+        updatedAt: new Date().toISOString()
       };
 
       if (editingResource) {
         await updateDoc(doc(db, 'resources', editingResource.id), resourceData);
         setMessage({ type: 'success', text: 'Resource updated successfully!' });
       } else {
-        resourceData.createdAt = new Date().toISOString();
-        resourceData.downloadCount = 0;
-        resourceData.viewCount = 0;
-        await addDoc(collection(db, 'resources'), resourceData);
+        const newResourceData = {
+          ...resourceData,
+          createdAt: new Date().toISOString(),
+          downloadCount: 0,
+          viewCount: 0
+        };
+        await addDoc(collection(db, 'resources'), newResourceData);
         setMessage({ type: 'success', text: 'Resource added successfully!' });
       }
       
@@ -216,7 +224,7 @@ export default function ResourcesManagement() {
     setFormData({
       title: '',
       description: '',
-      category: RESOURCE_CATEGORIES[0],
+      category: RESOURCE_CATEGORIES[0] as ResourceCategory,
       tags: '',
       isDownloadable: true
     });
@@ -234,7 +242,7 @@ export default function ResourcesManagement() {
       ...prev,
       title: resource.title,
       description: resource.description,
-      category: resource.category,
+      category: resource.category as ResourceCategory,
       tags: resource.tags?.join(', ') || '',
       isDownloadable: resource.isDownloadable
     }));
@@ -353,7 +361,7 @@ export default function ResourcesManagement() {
             <label className="block text-sm font-medium text-gray-700">Category</label>
             <select
               value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value as ResourceCategory })}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#803C9A] focus:ring-[#803C9A]"
             >

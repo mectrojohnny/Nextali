@@ -1,6 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <rect width="800" height="600" fill="#f3f4f6"/>
-  <path d="M400 250 L450 350 L350 350 Z" fill="#d1d5db"/>
-  <path d="M300 200 A100 100 0 1 0 300 400" fill="#d1d5db"/>
-  <text x="400" y="500" font-family="Arial" font-size="24" text-anchor="middle" fill="#6b7280">Image not available</text>
+  <rect width="800" height="600" fill="#f8f9fa"/>
+  <rect x="0" y="0" width="800" height="600" fill="url(#gradient)"/>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#751731;stop-opacity:0.1"/>
+      <stop offset="100%" style="stop-color:#F4D165;stop-opacity:0.1"/>
+    </linearGradient>
+  </defs>
+  <text x="400" y="300" font-family="Arial" font-size="24" fill="#751731" text-anchor="middle">Image not available</text>
+  <rect x="250" y="200" width="300" height="200" fill="none" stroke="#751731" stroke-width="2" stroke-dasharray="5,5"/>
+  <path d="M400 250 L450 350 L350 350 Z" fill="#F4D165" opacity="0.5"/>
 </svg> 
