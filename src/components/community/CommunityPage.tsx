@@ -8,7 +8,7 @@ import { useTheme } from '@/context/ThemeContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Avatar from '@/components/Avatar';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { 
   collection, 
   query, 
@@ -21,6 +21,7 @@ import {
   getDoc,
   setDoc
 } from 'firebase/firestore';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { logger } from '@/utils/logger';
 import SocialMediaLinks from './SocialMediaLinks';
 
@@ -83,6 +84,7 @@ export default function CommunityPage() {
     email: '',
     isAnonymous: false
   });
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -137,6 +139,29 @@ export default function CommunityPage() {
     initializePosts();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      if (user) {
+        // Update userDetails with Firebase user info
+        setUserDetails({
+          name: user.displayName || '',
+          email: user.email || '',
+          isAnonymous: false
+        });
+      } else {
+        // Reset userDetails when logged out
+        setUserDetails({
+          name: '',
+          email: '',
+          isAnonymous: false
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const isSameDay = (date1: Date, date2: Date) => {
     return date1.getFullYear() === date2.getFullYear() &&
            date1.getMonth() === date2.getMonth() &&
@@ -146,7 +171,7 @@ export default function CommunityPage() {
   const handleCreatePost = async () => {
     if (!newPost.trim()) return;
 
-    if (!userDetails.isAnonymous && (!userDetails.name || !userDetails.email)) {
+    if (!currentUser || !userDetails.name || !userDetails.email) {
       setShowUserDetails(true);
       return;
     }
@@ -154,9 +179,10 @@ export default function CommunityPage() {
     try {
       const post = {
         author: {
-          name: userDetails.isAnonymous ? 'Anonymous User' : userDetails.name,
-          avatar: '/avatars/default.jpg',
+          name: userDetails.name,
+          avatar: currentUser.photoURL || '/avatars/default.jpg',
           isAdmin: false,
+          uid: currentUser.uid
         },
         content: newPost,
         timestamp: Timestamp.now(),
@@ -593,40 +619,64 @@ export default function CommunityPage() {
                         </div>
                       </motion.div>
                     ) : (
-                      <div className="flex items-center mb-3 sm:mb-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center text-white text-sm sm:text-base">
-                          {userDetails.isAnonymous ? 'A' : (userDetails.name ? userDetails.name[0] : 'C')}
-                        </div>
-                        <div className="ml-3 sm:ml-4">
-                          <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
-                            {userDetails.isAnonymous ? 'Anonymous User' : (userDetails.name || 'Create a Post')}
-                          </h3>
-                          <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                            <p>Share your thoughts and expertise in </p>
-                            <span className="mx-1 text-[#751731] dark:text-[#F4D165] font-medium">
-                              {selectedCategory === 'all' ? 'General' : categories.find(c => c.id === selectedCategory)?.name || 'General'}
-                            </span>
+                      <>
+                        {!currentUser ? (
+                          <div className="bg-[#751731]/5 dark:bg-[#751731]/10 rounded-lg p-4 text-center">
+                            <p className="text-gray-700 dark:text-gray-300 mb-3">Please log in to create a post</p>
+                            <button
+                              onClick={() => setShowUserDetails(true)}
+                              className="bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all text-sm"
+                            >
+                              Log In to Post
+                            </button>
                           </div>
-                        </div>
-                      </div>
+                        ) : (
+                          <div className="flex items-center mb-3 sm:mb-4">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center text-white text-sm sm:text-base">
+                              {userDetails.name[0]}
+                            </div>
+                            <div className="ml-3 sm:ml-4">
+                              <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
+                                {userDetails.name}
+                              </h3>
+                              <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                <p>Share your thoughts and expertise in </p>
+                                <span className="mx-1 text-[#751731] dark:text-[#F4D165] font-medium">
+                                  {selectedCategory === 'all' ? 'General' : categories.find(c => c.id === selectedCategory)?.name || 'General'}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
 
                     <textarea
                       value={newPost}
                       onChange={(e) => setNewPost(e.target.value)}
-                      className="w-full p-3 sm:p-4 border border-[#751731]/20 dark:border-[#751731]/40 rounded-xl focus:ring-2 focus:ring-[#751731] focus:border-transparent resize-none bg-transparent dark:bg-gray-700/50 dark:text-white text-sm sm:text-base"
-                      placeholder="Share your business insights, ask questions, or connect with fellow entrepreneurs in our growing community..."
+                      disabled={!userDetails.name || !userDetails.email}
+                      className={`w-full p-3 sm:p-4 border border-[#751731]/20 dark:border-[#751731]/40 rounded-xl focus:ring-2 focus:ring-[#751731] focus:border-transparent resize-none bg-transparent dark:bg-gray-700/50 dark:text-white text-sm sm:text-base ${
+                        !userDetails.name || !userDetails.email ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                      placeholder={!userDetails.name || !userDetails.email ? 
+                        "Please log in to create a post..." : 
+                        "Share your business insights, ask questions, or connect with fellow entrepreneurs in our growing community..."}
                       rows={3}
                     />
                     <div className="mt-3 sm:mt-4 flex justify-end items-center">
                       <motion.button 
                         onClick={handleCreatePost}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm"
+                        disabled={!userDetails.name || !userDetails.email || !newPost.trim()}
+                        whileHover={userDetails.name && userDetails.email ? { scale: 1.05 } : {}}
+                        whileTap={userDetails.name && userDetails.email ? { scale: 0.95 } : {}}
+                        className={`bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg shadow-md transition-all flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm ${
+                          !userDetails.name || !userDetails.email || !newPost.trim() ? 
+                          'opacity-50 cursor-not-allowed' : 
+                          'hover:shadow-lg'
+                        }`}
                       >
                         <span className="material-icons-outlined text-sm sm:text-base">send</span>
-                        <span>Share Post</span>
+                        <span>{!userDetails.name || !userDetails.email ? 'Login Required' : 'Share Post'}</span>
                       </motion.button>
                     </div>
                   </motion.div>

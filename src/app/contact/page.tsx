@@ -43,26 +43,76 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white via-[#751731]/5 to-white dark:from-gray-900 dark:via-[#9E2F4B]/30 dark:to-gray-900">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#803C9A] to-[#FA4B99] bg-clip-text text-transparent mb-4">
-              Contact Us
+            <h1 className="text-4xl sm:text-5xl font-bold text-[#751731] dark:text-[#F4D165] mb-4">
+              Get in Touch
             </h1>
-            <p className="text-lg text-gray-600">
-              Have questions or need support? We&apos;re here to help you on your journey.
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Have questions about our services? We&apos;re here to help you build and grow your business.
             </p>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-[#803C9A]/10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-[#751731]/20 dark:border-[#751731]/40 shadow-lg">
+              <div className="flex items-center mb-4">
+                <span className="material-icons-outlined text-2xl text-[#751731] dark:text-[#F4D165]">
+                  phone
+                </span>
+                <h3 className="ml-2 text-lg font-semibold text-gray-800 dark:text-white">Phone</h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Call us at:{" "}
+                <a 
+                  href="tel:+2348163930033"
+                  className="text-[#751731] dark:text-[#F4D165] hover:underline transition-colors"
+                >
+                  +234 816 393 0033
+                </a>
+              </p>
+            </div>
+
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-[#751731]/20 dark:border-[#751731]/40 shadow-lg">
+              <div className="flex items-center mb-4">
+                <span className="material-icons-outlined text-2xl text-[#751731] dark:text-[#F4D165]">
+                  email
+                </span>
+                <h3 className="ml-2 text-lg font-semibold text-gray-800 dark:text-white">Email</h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                Write to us:{" "}
+                <a 
+                  href="mailto:hello@nextlaihq"
+                  className="text-[#751731] dark:text-[#F4D165] hover:underline transition-colors"
+                >
+                  hello@nextlaihq
+                </a>
+              </p>
+            </div>
+
+            <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl p-6 border border-[#751731]/20 dark:border-[#751731]/40 shadow-lg">
+              <div className="flex items-center mb-4">
+                <span className="material-icons-outlined text-2xl text-[#751731] dark:text-[#F4D165]">
+                  schedule
+                </span>
+                <h3 className="ml-2 text-lg font-semibold text-gray-800 dark:text-white">Response Time</h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-300">
+                We typically respond within 24 hours during business days.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-xl p-6 sm:p-8 border border-[#751731]/20 dark:border-[#751731]/40">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Your Name
                   </label>
                   <input
@@ -72,12 +122,12 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#803C9A] focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-[#751731]/20 dark:border-[#751731]/40 rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-transparent transition-shadow dark:text-white"
                     placeholder="John Doe"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Email Address
                   </label>
                   <input
@@ -87,14 +137,14 @@ export default function ContactPage() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#803C9A] focus:border-transparent transition-shadow"
+                    className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-[#751731]/20 dark:border-[#751731]/40 rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-transparent transition-shadow dark:text-white"
                     placeholder="john@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Subject
                 </label>
                 <select
@@ -103,18 +153,20 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#803C9A] focus:border-transparent transition-shadow"
+                  className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-[#751731]/20 dark:border-[#751731]/40 rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-transparent transition-shadow dark:text-white"
                 >
                   <option value="">Select a subject</option>
                   <option value="general">General Inquiry</option>
                   <option value="support">Support Request</option>
                   <option value="feedback">Feedback</option>
                   <option value="partnership">Partnership Opportunity</option>
+                  <option value="business">Business Development</option>
+                  <option value="investment">Investment Opportunities</option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Message
                 </label>
                 <textarea
@@ -124,7 +176,7 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#803C9A] focus:border-transparent transition-shadow resize-none"
+                  className="w-full px-4 py-2 bg-white dark:bg-gray-700 border border-[#751731]/20 dark:border-[#751731]/40 rounded-lg focus:ring-2 focus:ring-[#751731] focus:border-transparent transition-shadow resize-none dark:text-white"
                   placeholder="How can we help you?"
                 />
               </div>
@@ -135,8 +187,8 @@ export default function ContactPage() {
                   disabled={isSubmitting}
                   className={`w-full py-3 px-6 rounded-lg text-white font-medium transition-all duration-200 
                     ${isSubmitting 
-                      ? 'bg-gray-400 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-[#803C9A] to-[#FA4B99] hover:shadow-lg hover:scale-[1.02]'
+                      ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' 
+                      : 'bg-gradient-to-r from-[#751731] to-[#F4D165] hover:shadow-lg hover:scale-[1.02]'
                     }`}
                 >
                   {isSubmitting ? (
@@ -152,7 +204,7 @@ export default function ContactPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-center"
+                  className="p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 rounded-lg text-green-700 dark:text-green-300 text-center"
                 >
                   Thank you for your message! We&apos;ll get back to you soon.
                 </motion.div>
@@ -162,56 +214,12 @@ export default function ContactPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-center"
+                  className="p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-center"
                 >
                   Oops! Something went wrong. Please try again later.
                 </motion.div>
               )}
             </form>
-          </div>
-
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-[#803C9A]/10 shadow-lg">
-              <div className="flex items-center mb-4">
-                <span className="material-icons-outlined text-2xl bg-gradient-to-r from-[#803C9A] to-[#FA4B99] bg-clip-text text-transparent">
-                  email
-                </span>
-                <h3 className="ml-2 text-lg font-semibold text-gray-800">Email Us</h3>
-              </div>
-              <p className="text-gray-600">
-                For general inquiries:{" "}
-                <a 
-                  href="mailto:info@restrevivethrive.com"
-                  className="text-[#803C9A] hover:text-[#FA4B99] transition-colors"
-                >
-                  info@restrevivethrive.com
-                </a>
-              </p>
-              <p className="text-gray-600 mt-2">
-                For support:{" "}
-                <a 
-                  href="mailto:support@restrevivethrive.com"
-                  className="text-[#803C9A] hover:text-[#FA4B99] transition-colors"
-                >
-                  support@restrevivethrive.com
-                </a>
-              </p>
-            </div>
-
-            <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 border border-[#803C9A]/10 shadow-lg">
-              <div className="flex items-center mb-4">
-                <span className="material-icons-outlined text-2xl bg-gradient-to-r from-[#803C9A] to-[#FA4B99] bg-clip-text text-transparent">
-                  schedule
-                </span>
-                <h3 className="ml-2 text-lg font-semibold text-gray-800">Response Time</h3>
-              </div>
-              <p className="text-gray-600">
-                We aim to respond to all inquiries within 24-48 hours during business days.
-              </p>
-              <p className="text-gray-600 mt-2">
-                For urgent medical concerns, please contact your local emergency services.
-              </p>
-            </div>
           </div>
         </motion.div>
       </main>

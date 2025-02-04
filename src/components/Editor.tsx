@@ -1,16 +1,17 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor as TipTapEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
+import React from 'react';
 
 interface EditorProps {
   value: string;
   onChange: (content: string) => void;
 }
 
-const MenuBar = ({ editor }: { editor: any }) => {
+const MenuBar = ({ editor }: { editor: TipTapEditor | null }) => {
   if (!editor) {
     return null;
   }
@@ -154,25 +155,104 @@ const MenuBar = ({ editor }: { editor: any }) => {
 export default function Editor({ value, onChange }: EditorProps) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Image,
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+        bold: {},
+        italic: {},
+        strike: {},
+        code: {},
+        bulletList: {},
+        orderedList: {},
+        blockquote: {},
+      }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
       Link.configure({
         openOnClick: false,
+        HTMLAttributes: {
+          class: 'text-[#751731] hover:text-[#F4D165] transition-colors',
+        },
       }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      onChange(html);
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none max-w-none',
+      },
     },
   });
+
+  // Update editor content when value prop changes
+  React.useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [value, editor]);
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <MenuBar editor={editor} />
       <EditorContent 
         editor={editor} 
-        className="prose max-w-none p-4 min-h-[400px] focus-within:ring-2 focus-within:ring-purple-500 focus-within:ring-opacity-50"
+        className="prose max-w-none p-6 min-h-[500px] border-t border-gray-200 focus-within:ring-2 focus-within:ring-[#751731] focus-within:ring-opacity-50 bg-white"
       />
+      <style jsx global>{`
+        .ProseMirror {
+          min-height: 500px;
+          padding: 1rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem;
+          margin: 0.5rem;
+          background-color: white;
+          font-size: 1rem;
+          line-height: 1.75;
+        }
+        .ProseMirror:focus {
+          outline: none;
+          border-color: #751731;
+        }
+        .ProseMirror > * + * {
+          margin-top: 0.75em;
+        }
+        .ProseMirror p {
+          margin: 1em 0;
+        }
+        .ProseMirror h1,
+        .ProseMirror h2,
+        .ProseMirror h3 {
+          line-height: 1.1;
+          font-weight: 600;
+          margin: 1.5em 0 0.5em;
+        }
+        .ProseMirror h1 { font-size: 2em; }
+        .ProseMirror h2 { font-size: 1.5em; }
+        .ProseMirror h3 { font-size: 1.25em; }
+        .ProseMirror ul,
+        .ProseMirror ol {
+          padding-left: 1.5em;
+          margin: 1em 0;
+        }
+        .ProseMirror blockquote {
+          border-left: 3px solid #751731;
+          padding-left: 1em;
+          margin: 1em 0;
+          color: #666;
+        }
+        .ProseMirror code {
+          background-color: #f3f4f6;
+          padding: 0.2em 0.4em;
+          border-radius: 0.25em;
+          font-size: 0.9em;
+        }
+      `}</style>
     </div>
   );
 } 
