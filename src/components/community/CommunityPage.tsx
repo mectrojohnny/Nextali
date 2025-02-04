@@ -24,55 +24,8 @@ import {
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { logger } from '@/utils/logger';
 import SocialMediaLinks from './SocialMediaLinks';
-
-interface Post {
-  id: string;
-  author: {
-    name: string;
-    avatar: string;
-    isAdmin: boolean;
-  };
-  content: string;
-  timestamp: Date;
-  likes: number;
-  isLiked: boolean;
-  comments: Comment[];
-  isPinned?: boolean;
-  category: string;
-}
-
-interface Comment {
-  id: string;
-  author: {
-    name: string; 
-    avatar: string;
-  };
-  content: string;
-  timestamp: Date;
-  likes: number;
-  isLiked: boolean;
-}
-
-interface UserDetails {
-  name: string;
-  email: string;
-  isAnonymous: boolean;
-}
-
-interface FirebasePost extends Omit<Post, 'timestamp'> {
-  timestamp: Timestamp;
-}
-
-const categories = [
-  { id: 'bill', name: 'Business Innovation Lab', icon: 'business_center', count: 24 },
-  { id: 'tea', name: 'Talent Exchange Academy', icon: 'school', count: 18 },
-  { id: 'nep', name: 'Next Entrepreneurs Platform', icon: 'rocket_launch', count: 15 },
-  { id: 'grants', name: 'Grants & Opportunities', icon: 'paid', count: 12 },
-  { id: 'mentorship', name: 'Mentorship', icon: 'groups', count: 14 },
-  { id: 'resources', name: 'Business Resources', icon: 'library_books', count: 16 },
-  { id: 'success', name: 'Success Stories', icon: 'stars', count: 9 },
-  { id: 'announcements', name: 'Announcements', icon: 'campaign', count: 20 },
-];
+import { Post, UserDetails, FirebasePost, CommunityCategory, COMMUNITY_CATEGORIES } from '@/types/community';
+import { getCategoryPostCounts, softDeletePost } from '@/lib/firebase_utils';
 
 export default function CommunityPage() {
   const { theme } = useTheme();
@@ -87,6 +40,20 @@ export default function CommunityPage() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [categories, setCategories] = useState<CommunityCategory[]>(
+    COMMUNITY_CATEGORIES.map(cat => ({ ...cat, count: 0 }))
+  );
+  const [categoryError, setcategoryError] = useState(false);
+  const [deleteError, setDeleteError] = useState<string>('');
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categoriesWithCounts = await getCategoryPostCounts();
+      setCategories(categoriesWithCounts);
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const initializePosts = async () => {
@@ -176,6 +143,11 @@ export default function CommunityPage() {
       return;
     }
 
+    if (selectedCategory === 'all') {
+      setcategoryError(true);
+      return;
+    }
+
     try {
       const post = {
         author: {
@@ -189,7 +161,7 @@ export default function CommunityPage() {
         likes: 0,
         isLiked: false,
         comments: [],
-        category: selectedCategory === 'all' ? 'support' : selectedCategory,
+        category: selectedCategory,
       };
 
       const docRef = await addDoc(collection(db, 'posts'), post);
@@ -202,6 +174,7 @@ export default function CommunityPage() {
 
       setNewPost('');
       setShowUserDetails(false);
+      setcategoryError(false);
     } catch (error) {
       console.error('Error creating post:', error);
     }
@@ -305,7 +278,35 @@ export default function CommunityPage() {
     }
   };
 
+  const handleDeletePost = async (postId: string) => {
+    if (!currentUser) return;
+
+    try {
+      const success = await softDeletePost(postId, currentUser.uid);
+      
+      if (success) {
+        // Update local state to reflect deletion
+        setPosts(prevPosts => prevPosts.map(post => 
+          post.id === postId 
+            ? { 
+                ...post, 
+                isDeleted: true, 
+                deletedAt: new Date(), 
+                deletedBy: currentUser.uid 
+              } 
+            : post
+        ));
+        setDeleteError('');
+      } else {
+        setDeleteError('Failed to delete post. Please try again.');
+      }
+    } catch (error) {
+      setDeleteError(error instanceof Error ? error.message : 'Failed to delete post');
+    }
+  };
+
   const filteredPosts = posts.filter(post => 
+    !post.isDeleted && 
     (selectedCategory === 'all' || post.category === selectedCategory || post.isPinned) &&
     (post.isPinned || isSameDay(post.timestamp, selectedDate))
   );
@@ -332,7 +333,7 @@ export default function CommunityPage() {
 
         {/* Main Content Container */}
         <div className="flex-1 flex flex-col min-h-0">
-          <main className={`flex-grow transition-colors duration-200 ${
+          <main className={`flex-grow transition-colors duration-200 pb-16 md:pb-0 ${
             theme === 'dark' 
               ? 'bg-gradient-to-b from-gray-900 via-[#9E2F4B]/30 to-gray-900' 
               : 'bg-gradient-to-b from-white via-[#751731]/5 to-white'
@@ -344,7 +345,7 @@ export default function CommunityPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center mb-8 sm:mb-12 pt-8 sm:pt-16"
+                  className="text-center mb-8 sm:mb-12 pt-24 md:pt-16"
                 >
                   <h1 className="text-3xl sm:text-5xl font-extrabold mb-2 sm:mb-4 text-[#751731] dark:text-[#F4D165] tracking-tight leading-none drop-shadow-lg">
                     <span className="inline-block transform hover:scale-105 transition-transform duration-200">
@@ -490,30 +491,48 @@ export default function CommunityPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-xl shadow-lg p-4 sm:p-6 border border-[#751731]/20 dark:border-[#751731]/40"
                     >
-                      <div className="flex items-center mb-3 sm:mb-4">
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center text-white text-sm sm:text-base">
-                          {post.author.name[0]}
-                        </div>
-                        <div className="ml-3 sm:ml-4">
-                          <div className="flex items-center">
-                            <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
-                              {post.author.name}
-                            </h3>
-                            {post.author.isAdmin && (
-                              <span className="ml-2 px-2 py-0.5 text-xs bg-[#751731]/10 dark:bg-[#751731]/30 text-[#751731] dark:text-[#F4D165] rounded-full">
-                                Admin
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
+                        <div className="flex items-center">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-[#751731] to-[#F4D165] flex items-center justify-center text-white text-sm sm:text-base">
+                            {post.author.name[0]}
+                          </div>
+                          <div className="ml-3 sm:ml-4">
+                            <div className="flex items-center">
+                              <h3 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
+                                {post.author.name}
+                              </h3>
+                              {post.author.isAdmin && (
+                                <span className="ml-2 px-2 py-0.5 text-xs bg-[#751731]/10 dark:bg-[#751731]/30 text-[#751731] dark:text-[#F4D165] rounded-full">
+                                  Admin
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                              <span>{post.timestamp.toLocaleDateString()}</span>
+                              <span className="mx-2">•</span>
+                              <span className="text-[#751731] dark:text-[#F4D165]">
+                                {categories.find(c => c.id === post.category)?.name || 'General'}
                               </span>
-                            )}
-                          </div>
-                          <div className="flex items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                            <span>{post.timestamp.toLocaleDateString()}</span>
-                            <span className="mx-2">•</span>
-                            <span className="text-[#751731] dark:text-[#F4D165]">
-                              {categories.find(c => c.id === post.category)?.name || 'General'}
-                            </span>
+                            </div>
                           </div>
                         </div>
+                        {currentUser && (post.author.uid === currentUser.uid || currentUser.email?.endsWith('@nextali.com')) && (
+                          <motion.button
+                            onClick={() => handleDeletePost(post.id)}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="p-2 text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+                          >
+                            <span className="material-icons-outlined text-base sm:text-lg">delete_outline</span>
+                          </motion.button>
+                        )}
                       </div>
+
+                      {deleteError && (
+                        <p className="text-red-500 dark:text-red-400 text-xs sm:text-sm mb-2">
+                          {deleteError}
+                        </p>
+                      )}
 
                       <p className="text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 text-sm sm:text-base">{post.content}</p>
 
@@ -655,14 +674,23 @@ export default function CommunityPage() {
                       value={newPost}
                       onChange={(e) => setNewPost(e.target.value)}
                       disabled={!userDetails.name || !userDetails.email}
-                      className={`w-full p-3 sm:p-4 border border-[#751731]/20 dark:border-[#751731]/40 rounded-xl focus:ring-2 focus:ring-[#751731] focus:border-transparent resize-none bg-transparent dark:bg-gray-700/50 dark:text-white text-sm sm:text-base ${
+                      className={`w-full p-3 sm:p-4 border ${
+                        categoryError ? 'border-red-500 dark:border-red-400' : 'border-[#751731]/20 dark:border-[#751731]/40'
+                      } rounded-xl focus:ring-2 focus:ring-[#751731] focus:border-transparent resize-none bg-transparent dark:bg-gray-700/50 dark:text-white text-sm sm:text-base ${
                         !userDetails.name || !userDetails.email ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                       placeholder={!userDetails.name || !userDetails.email ? 
                         "Please log in to create a post..." : 
+                        categoryError ?
+                        "Please select a specific category before posting..." :
                         "Share your business insights, ask questions, or connect with fellow entrepreneurs in our growing community..."}
                       rows={3}
                     />
+                    {categoryError && (
+                      <p className="mt-2 text-red-500 dark:text-red-400 text-xs sm:text-sm">
+                        Please select a specific category from the sidebar before creating your post.
+                      </p>
+                    )}
                     <div className="mt-3 sm:mt-4 flex justify-end items-center">
                       <motion.button 
                         onClick={handleCreatePost}

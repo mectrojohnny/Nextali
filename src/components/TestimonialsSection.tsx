@@ -22,7 +22,7 @@ const testimonials = [
   {
     id: 1,
     challenge: "Talent Access",
-    experience: "My tech startup needed top designers but couldn&apos;t afford the high costs.",
+    experience: "My tech startup needed top designers but couldn't afford the high costs.",
     tip: "Using Nextali's Exchange Hub, I traded my coding skills for professional design work. This helped us launch our app in just 2 months, saving over N350,000.",
     name: "Benny Nnamdi",
     age: "CTO, Foodmata",
@@ -41,7 +41,7 @@ const testimonials = [
     id: 3,
     challenge: "Funding & Support",
     experience: "Great product, zero connections. Banks wouldn't even look at us.",
-    tip: "NEP platform connected us to a $10,000 grant and mentors who actually cared. Now we are in 3 African countries.",
+    tip: "NEP platform connected us to a $5,000 grant and mentors who actually cared. Now we are in 3 African countries.",
     name: "Grace O",
     age: "CEO, Amagrace Ventures",
     duration: "NEP Success Story 2024"

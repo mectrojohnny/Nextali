@@ -1,8 +1,18 @@
 import CommunityPage from '@/components/community/CommunityPage';
 
 export const metadata = {
-  title: 'Thrive Centre - ReReThrive',
-  description: 'Join our supportive Thrive Centre for people with fibromyalgia and CFS/ME. Share experiences, find support, and connect with others in specialized categories.',
+  title: 'NextHub Community - Nextali',
+  description: 'Join our vibrant NextHub community for African entrepreneurs and SMEs. Connect, collaborate, and grow with like-minded business leaders.',
+  openGraph: {
+    title: 'NextHub Community - Nextali',
+    description: 'Join our vibrant NextHub community for African entrepreneurs and SMEs. Connect, collaborate, and grow with like-minded business leaders.',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NextHub Community - Nextali',
+    description: 'Join our vibrant NextHub community for African entrepreneurs and SMEs. Connect, collaborate, and grow with like-minded business leaders.',
+  },
 };
 
 export default function Page() {

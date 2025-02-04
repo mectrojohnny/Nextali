@@ -77,11 +77,40 @@ export default function SocialMediaManagement() {
     fetchLinks();
   }, []);
 
+  // Function to ensure URLs are direct and properly formatted
+  const formatSocialUrl = (url: string, platform: string): string => {
+    if (!url) return '';
+    
+    // Remove any relative paths
+    url = url.replace(/^\//, '');
+    
+    // Ensure URL has proper protocol
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://' + url;
+    }
+    
+    // Handle x.com/twitter.com URLs
+    if (platform.toLowerCase() === 'twitter' && (url.includes('x.com') || url.includes('twitter.com'))) {
+      const username = url.split('/').pop();
+      if (username) {
+        return `https://x.com/${username}`;
+      }
+    }
+    
+    return url;
+  };
+
   const handleSave = async () => {
     try {
       setLoading(true);
+      // Format all URLs before saving
+      const formattedLinks = links.map(link => ({
+        ...link,
+        url: formatSocialUrl(link.url, link.name)
+      }));
       const docRef = doc(db, 'settings', 'socialLinks');
-      await setDoc(docRef, { links }, { merge: true });
+      await setDoc(docRef, { links: formattedLinks }, { merge: true });
+      setLinks(formattedLinks); // Update state with formatted URLs
       setMessage({ type: 'success', text: 'Social media links updated successfully!' });
     } catch (error) {
       console.error('Error saving social links:', error);
@@ -93,6 +122,10 @@ export default function SocialMediaManagement() {
 
   const handleChange = (index: number, field: keyof SocialLink, value: string) => {
     const newLinks = [...links];
+    // Format URL immediately when changed
+    if (field === 'url') {
+      value = formatSocialUrl(value, newLinks[index].name);
+    }
     newLinks[index] = { ...newLinks[index], [field]: value };
     setLinks(newLinks);
   };
