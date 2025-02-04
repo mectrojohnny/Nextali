@@ -21,30 +21,30 @@ const cardVariants: Variants = {
 const testimonials = [
   {
     id: 1,
-    challenge: "Morning Stiffness & Fatigue",
-    experience: "Getting out of bed is my biggest challenge. The morning stiffness can last for hours.",
-    tip: "I use a heated blanket 15 minutes before getting up, and do gentle stretches while still in bed.",
-    name: "Sarah",
-    age: 34,
-    duration: "Managing Fibro since 2018"
+    challenge: "Talent Access",
+    experience: "My tech startup needed top designers but couldn&apos;t afford the high costs.",
+    tip: "Using Nextali's Exchange Hub, I traded my coding skills for professional design work. This helped us launch our app in just 2 months, saving over N350,000.",
+    name: "Benny Nnamdi",
+    age: "CTO, Foodmata",
+    duration: "Exchange Hub Member 2024"
   },
   {
     id: 2,
-    challenge: "Work & Brain Fog",
-    experience: "I struggled with concentration and memory at work, especially during meetings.",
-    tip: "I now take quick notes on my phone and use reminders. My workplace allows me flexible hours to work when I&apos;m most alert.",
-    name: "Michael",
-    age: 42,
-    duration: "Managing Fibro since 2015"
+    challenge: "Growth Tools",
+    experience: "Running my business was chaos - spreadsheets everywhere, missed tasks, lost opportunities.",
+    tip: "Nextali's Business Suites changed everything. Simple tools, better organization, more sales. Our revenue doubled in 3 months.",
+    name: "Joe A",
+    age: "CEO, AlizorTech",
+    duration: "Business Suites User 2024"
   },
   {
     id: 3,
-    challenge: "Sleep Quality",
-    experience: "Unrefreshing sleep left me exhausted, no matter how long I slept.",
-    tip: "Creating a strict sleep routine and using a sleep tracking app helped me identify better sleep patterns.",
-    name: "Emma",
-    age: 29,
-    duration: "Managing Fibro since 2020"
+    challenge: "Funding & Support",
+    experience: "Great product, zero connections. Banks wouldn't even look at us.",
+    tip: "NEP platform connected us to a $10,000 grant and mentors who actually cared. Now we are in 3 African countries.",
+    name: "Grace O",
+    age: "CEO, Amagrace Ventures",
+    duration: "NEP Success Story 2024"
   }
 ];
 
@@ -66,10 +66,10 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
-            Real Stories, Real Transformations
+            Your Success, Our Tools
           </h2>
           <p className="text-lg sm:text-xl text-gray-300">
-            Discover how our community members are rewriting their stories with fibromyalgia
+            Real stories from African entrepreneurs who made it happen
           </p>
         </motion.div>
 
@@ -126,14 +126,14 @@ const TestimonialsSection = () => {
           transition={{ delay: 0.3 }}
         >
           <a
-            href="/start"
+            href="/book-consultation"
             className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#751731] to-[#F4D165] text-white rounded-lg hover:shadow-lg transition-all duration-300 text-base sm:text-lg font-medium group"
           >
-            Book Your Discovery Session
+            Start Your Success Story Today
             <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
           </a>
           <p className="text-sm sm:text-base text-gray-400">
-            Take the first step towards understanding and healing your invisible illness
+            Join Africa&apos;s fastest-growing business community - Simple tools, real results
           </p>
         </motion.div>
       </div>

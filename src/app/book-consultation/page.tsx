@@ -36,7 +36,6 @@ const ConsultationPage = () => {
         throw new Error(data.error || 'Failed to submit form');
       }
 
-      // Redirect to thank you page on success
       router.push('/thank-you');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -48,21 +47,29 @@ const ConsultationPage = () => {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-gradient-to-b from-white to-purple-50 pt-20">
-        <div className="max-w-2xl mx-auto px-4 py-12">
+      <main className="min-h-screen bg-gradient-to-b from-white to-[#F4D165]/10 pt-20">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#751731]/5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#F4D165]/5 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
+        </div>
+
+        <div className="max-w-2xl mx-auto px-4 py-12 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-white rounded-2xl shadow-xl p-8 md:p-12"
+            className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12 border border-[#751731]/10"
           >
             <div className="text-center mb-10">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#FA4B99] to-[#803C9A]">
-                Let's Start Your Journey Together
+              <div className="h-1 w-20 bg-gradient-to-r from-[#751731] to-[#F4D165] mx-auto mb-8" />
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#751731] to-[#F4D165]">
+                Start Your Business Journey
               </h1>
               <p className="text-gray-600 text-lg">
-                I'd love to hear your story and explore how we can work together
+                Let's explore how Nextali can transform your business potential
               </p>
+              <div className="h-1 w-20 bg-gradient-to-r from-[#F4D165] to-[#751731] mx-auto mt-8" />
             </div>
 
             {error && (
@@ -81,7 +88,7 @@ const ConsultationPage = () => {
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA4B99] focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#751731] focus:border-transparent"
                   required
                   disabled={isSubmitting}
                 />
@@ -89,15 +96,15 @@ const ConsultationPage = () => {
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  How can I reach you?
+                  Your business email
                 </label>
                 <input
                   type="email"
                   id="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA4B99] focus:border-transparent"
-                  placeholder="Your email"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#751731] focus:border-transparent"
+                  placeholder="you@company.com"
                   required
                   disabled={isSubmitting}
                 />
@@ -105,15 +112,15 @@ const ConsultationPage = () => {
 
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                  Share a bit about what brings you here today
+                  Tell us about your business goals
                 </label>
                 <textarea
                   id="message"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   rows={6}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#FA4B99] focus:border-transparent"
-                  placeholder="Feel free to share whatever you're comfortable with..."
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#751731] focus:border-transparent"
+                  placeholder="Share your business challenges and what you'd like to achieve..."
                   disabled={isSubmitting}
                 />
               </div>
@@ -122,12 +129,12 @@ const ConsultationPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-block bg-gradient-to-r from-[#FA4B99] to-[#803C9A] text-white px-10 py-4 rounded-lg font-medium hover:shadow-lg transition-all text-lg disabled:opacity-50"
+                  className="inline-block bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-10 py-4 rounded-lg font-medium hover:shadow-lg transition-all text-lg disabled:opacity-50 transform hover:-translate-y-1"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? 'Sending...' : 'Start Transformation'}
                 </button>
                 <p className="mt-4 text-sm text-gray-500">
-                  I'll get back to you within 24 hours to schedule our chat
+                  Our team will get back to you within 24 hours
                 </p>
               </div>
             </form>

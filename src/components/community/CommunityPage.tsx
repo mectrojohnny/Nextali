@@ -604,7 +604,7 @@ export default function CommunityPage() {
                           <div className="flex flex-wrap items-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                             <p>Share your thoughts and expertise in </p>
                             <span className="mx-1 text-[#751731] dark:text-[#F4D165] font-medium">
-                              {selectedCategory === 'all' ? 'Support & Encouragement' : categories.find(c => c.id === selectedCategory)?.name || 'Support & Encouragement'}
+                              {selectedCategory === 'all' ? 'General' : categories.find(c => c.id === selectedCategory)?.name || 'General'}
                             </span>
                           </div>
                         </div>
