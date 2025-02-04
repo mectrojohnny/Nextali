@@ -143,11 +143,11 @@ export default function ResourcesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#803C9A] to-[#FF5757] bg-clip-text text-transparent mb-4">
-            Resources
+          <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent mb-4">
+            Business Resources
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore our collection of resources designed to help you understand and manage Fibromyalgia and CFS/ME better.
+            Access our curated collection of resources designed to help African entrepreneurs and SMEs grow, innovate, and succeed in the global marketplace.
           </p>
         </motion.div>
 
@@ -159,8 +159,8 @@ export default function ResourcesPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'bg-[#803C9A] text-white'
-                    : 'bg-white text-gray-600 hover:bg-gray-100'
+                    ? 'bg-[#751731] text-white'
+                    : 'bg-white text-gray-600 hover:bg-[#F4D165] hover:text-[#751731]'
                 }`}
               >
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -174,14 +174,14 @@ export default function ResourcesPage() {
               placeholder="Search resources..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full md:w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#803C9A] focus:border-transparent"
+              className="w-full md:w-64 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#751731] focus:border-transparent"
             />
           </div>
         </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#803C9A]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#751731]"></div>
           </div>
         ) : (
           <motion.div
@@ -194,7 +194,7 @@ export default function ResourcesPage() {
               <motion.div
                 key={resource.id}
                 variants={item}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-gray-100"
               >
                 {resource.imageUrl ? (
                   <img
@@ -203,15 +203,15 @@ export default function ResourcesPage() {
                     className="w-full h-48 object-cover"
                   />
                 ) : (
-                  <div className="w-full h-48 bg-gradient-to-r from-[#803C9A]/10 to-[#FF5757]/10 flex items-center justify-center">
+                  <div className="w-full h-48 bg-gradient-to-r from-[#751731]/10 to-[#F4D165]/10 flex items-center justify-center">
                     <span className="text-4xl text-gray-400">📚</span>
                   </div>
                 )}
                 
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900">{resource.title}</h3>
-                    <span className="px-3 py-1 bg-[#803C9A]/10 text-[#803C9A] text-sm rounded-full">
+                    <h3 className="text-xl font-semibold text-[#751731]">{resource.title}</h3>
+                    <span className="px-3 py-1 bg-[#F4D165]/20 text-[#751731] text-sm rounded-full">
                       {resource.category}
                     </span>
                   </div>
@@ -229,14 +229,14 @@ export default function ResourcesPage() {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleView(resource)}
-                        className="px-4 py-2 bg-[#803C9A] text-white rounded-lg hover:bg-[#6A2F80] transition-colors"
+                        className="px-4 py-2 bg-[#751731] text-white rounded-lg hover:bg-[#751731]/90 transition-colors"
                       >
                         View
                       </button>
                       {resource.isDownloadable && (
                         <button
                           onClick={() => handleDownload(resource)}
-                          className="px-4 py-2 bg-[#FF5757] text-white rounded-lg hover:bg-[#E64545] transition-colors"
+                          className="px-4 py-2 bg-[#F4D165] text-[#751731] font-medium rounded-lg hover:bg-[#F4D165]/90 transition-colors"
                         >
                           Download
                         </button>

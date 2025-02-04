@@ -12,9 +12,29 @@ export default function HeroSection() {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-  const slides = ['/1.jpg', '/2.jpg', '/3.jpg'];
+  const slides = [
+    { 
+      image: '/1.jpg', 
+      url: 'https://suite.nextali.com', 
+      alt: 'Nextali Business Suite',
+      message: 'Get more profit with  ou Business Tools',
+      linkText: 'Visit Business Suite →'
+    },
+    { 
+      image: '/2.jpg', 
+      url: 'https://exchangehub.nextali.com', 
+      alt: 'Nextali Exchange Hub',
+      message: 'Exchange Skills  & Sevices ',
+      linkText: 'Explore Exchange Hub →'
+    },
+    { 
+      image: '/3.jpg', 
+      url: 'https://nextentrepreneur.org', 
+      alt: 'Next Entrepreneur Platform',
+      message: 'Empower Your Journey',
+      linkText: 'Join NEP Platform →'
+    }
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,19 +42,6 @@ export default function HeroSection() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    console.log('Setting up mouse move effect...');
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX - window.innerWidth / 2) * 0.02,
-        y: (e.clientY - window.innerHeight / 2) * 0.02,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const titleVariants = {
@@ -74,26 +81,18 @@ export default function HeroSection() {
           animate={{ scale: 1, opacity: 0.1 }}
           transition={{ duration: 1.2 }}
           className="absolute top-20 right-[10%] w-96 h-96 rounded-full bg-gradient-to-r from-[#751731]/20 to-[#F4D165]/20 blur-3xl"
-          style={{
-            x: mousePosition.x * -1,
-            y: mousePosition.y * -1,
-          }}
         />
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.1 }}
           transition={{ duration: 1.2, delay: 0.2 }}
           className="absolute bottom-20 left-[10%] w-96 h-96 rounded-full bg-gradient-to-r from-[#F4D165]/20 to-[#751731]/20 blur-3xl"
-          style={{
-            x: mousePosition.x,
-            y: mousePosition.y,
-          }}
         />
       </motion.div>
 
       {/* Content */}
       <div className="relative w-full px-4 py-8 sm:py-20 sm:px-6 lg:px-8 flex items-center min-h-[75vh] sm:min-h-screen">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-7xl pt-20 sm:pt-0">
           <motion.div 
             className="text-center lg:text-left grid lg:grid-cols-2 gap-8 items-center"
             initial="hidden"
@@ -103,14 +102,14 @@ export default function HeroSection() {
             {/* Left Column - Text Content */}
             <div className="flex flex-col gap-8">
               <motion.h1 
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight"
+                className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-tight"
                 variants={titleVariants}
               >
-                <div className="overflow-hidden flex flex-col gap-2">
+                <div className="overflow-hidden flex flex-col gap-1 md:gap-2">
                   {mainTitle.map((line, i) => (
                     <div key={i} className="overflow-hidden">
                       <motion.span
-                        className="bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent inline-block"
+                        className="bg-gradient-to-r from-[#751731] via-[#9E2F4B] to-[#F4D165] bg-clip-text text-transparent inline-block drop-shadow-sm"
                         variants={letterVariants}
                         transition={{ duration: 0.4, delay: i * 0.1 }}
                       >
@@ -122,25 +121,25 @@ export default function HeroSection() {
               </motion.h1>
               
               <motion.div 
-                className="space-y-6"
+                className="space-y-4 md:space-y-6"
                 variants={titleVariants}
               >
-                <p className="text-xl md:text-2xl font-semibold text-[#751731] leading-relaxed">
+                <p className="text-lg md:text-xl font-bold text-[#751731] leading-relaxed">
                   Transform enterprises from vision to success.
                 </p>
-                <p className="text-lg md:text-xl text-[#751731]/80 leading-relaxed max-w-2xl">
-                  Our innovative platforms - <span className="font-semibold">BILL</span>, <span className="font-semibold">TEA</span>, and <span className="font-semibold">NEP</span> - deliver comprehensive business support, 
+                <p className="text-base md:text-lg text-gray-700 leading-relaxed max-w-2xl">
+                  Our innovative tech-driven products and services - <span className="font-semibold text-[#751731]">BILL</span>, <span className="font-semibold text-[#751731]">TEA</span>, and <span className="font-semibold text-[#751731]">NEP</span> - deliver comprehensive business support, 
                   skill development, and research-driven solutions for sustainable growth.
                 </p>
               </motion.div>
 
               <motion.div 
-                className="flex flex-col sm:flex-row gap-4 items-start"
+                className="flex flex-wrap justify-center lg:justify-start gap-4"
                 variants={titleVariants}
               >
-                <Link href="/platforms" className="w-full sm:w-auto">
+                <Link href="/platforms" className="inline-block">
                   <motion.button 
-                    className="w-full sm:w-auto bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-8 py-4 rounded-lg font-medium text-lg shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                    className="bg-gradient-to-r from-[#751731] to-[#F4D165] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg shadow-sm hover:shadow-xl transition-all duration-300 flex items-center justify-center group whitespace-nowrap"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -148,9 +147,9 @@ export default function HeroSection() {
                     <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                   </motion.button>
                 </Link>
-                <Link href="/contact" className="w-full sm:w-auto">
+                <Link href="/contact" className="inline-block">
                   <motion.button 
-                    className="w-full sm:w-auto border-2 border-[#F4D165] text-[#751731] px-8 py-4 rounded-lg font-medium text-lg hover:bg-[#F4D165] hover:text-white hover:border-[#F4D165] transition-all duration-300 flex items-center justify-center group shadow-sm hover:shadow-xl"
+                    className="border-2 border-[#751731] text-[#751731] px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg hover:bg-[#751731] hover:text-white transition-all duration-300 flex items-center justify-center group shadow-sm hover:shadow-xl whitespace-nowrap"
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
@@ -175,8 +174,8 @@ export default function HeroSection() {
                     key={value.name} 
                     className="px-6 py-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-sm border border-[#F4D165]/20 group hover:border-[#751731]/20 transition-all duration-300 hover:shadow-md"
                   >
-                    <span className="font-semibold text-[#751731] block text-lg mb-1">{value.name}</span>
-                    <span className="text-sm text-[#751731]/70">{value.desc}</span>
+                    <span className="font-semibold text-gray-900 block text-lg mb-1">{value.name}</span>
+                    <span className="text-sm text-gray-600">{value.desc}</span>
                   </div>
                 ))}
               </motion.div>
@@ -184,15 +183,15 @@ export default function HeroSection() {
 
             {/* Right Column - Blob Slider */}
             <motion.div
-              className="relative h-[300px] sm:h-[400px] lg:h-[550px] -mx-4 sm:mx-0 lg:-mr-24 xl:-mr-32 mt-8 lg:mt-0"
+              className="relative h-[250px] sm:h-[350px] lg:h-[500px] -mx-4 sm:mx-0 lg:-mr-24 xl:-mr-32 mt-8 lg:mt-0 mb-24 sm:mb-0"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[500px] lg:h-[500px] mx-auto lg:ml-auto">
+              <div className="relative w-[240px] h-[240px] sm:w-[300px] sm:h-[300px] lg:w-[450px] lg:h-[450px] mx-auto lg:ml-auto">
                 {slides.map((slide, index) => (
                   <motion.div
-                    key={slide}
+                    key={slide.image}
                     className="absolute inset-0"
                     initial={{ opacity: 0 }}
                     animate={{ 
@@ -201,26 +200,37 @@ export default function HeroSection() {
                     }}
                     transition={{ duration: 0.7 }}
                   >
-                    <div className="relative w-full h-full">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#751731]/10 to-[#F4D165]/10 rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-blob-slow"></div>
-                      <Image
-                        src={slide}
-                        alt={`Slide ${index + 1}`}
-                        fill
-                        className="object-cover rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-blob"
-                        style={{
-                          transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
-                        }}
-                        priority={index === 0}
-                      />
-                    </div>
+                    <Link href={slide.url} target="_blank" rel="noopener noreferrer" className="relative w-full h-full block group">
+                      <div className="relative w-full h-full flex flex-col">
+                        <div className="relative flex-grow">
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#751731]/10 to-[#F4D165]/10 rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-blob-slow"></div>
+                          <Image
+                            src={slide.image}
+                            alt={slide.alt}
+                            fill
+                            className="object-cover rounded-[60%_40%_30%_70%/60%_30%_70%_40%] animate-blob group-hover:scale-105 transition-transform duration-300"
+                            priority={index === 0}
+                          />
+                        </div>
+                        <div className="absolute sm:left-1/2 sm:-translate-x-1/2 sm:bottom-8 w-full sm:w-2/3 sm:max-w-[180px] p-3 bg-black/60 backdrop-blur-sm rounded-2xl flex flex-col items-center text-center transform group-hover:scale-105 transition-all duration-300 border border-[#F4D165]/20
+                          -bottom-24 sm:bottom-8 left-1/2 -translate-x-1/2">
+                          <p className="text-white font-semibold mb-1 text-base drop-shadow-lg">
+                            {slide.message}
+                          </p>
+                          <span className="inline-flex items-center text-[#F4D165] text-base font-medium group-hover:text-white transition-colors duration-300">
+                            {slide.linkText}
+                            <span className="ml-1 group-hover:translate-x-1 transition-transform duration-300">→</span>
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
 
               {/* Slide Indicators */}
-              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
-                {slides.map((_, index) => (
+              <div className="absolute -bottom-32 sm:-bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {slides.map((slide, index) => (
                   <button
                     key={index}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
@@ -229,7 +239,7 @@ export default function HeroSection() {
                         : 'bg-[#751731]/30'
                     }`}
                     onClick={() => setCurrentSlide(index)}
-                    aria-label={`Go to slide ${index + 1}`}
+                    aria-label={`Go to ${slide.alt}`}
                   />
                 ))}
               </div>

@@ -72,7 +72,7 @@ export default function CategorySidebar({
             <div className="p-4 sm:p-6">
               <div className="sticky top-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm pt-2 pb-4 -mt-2 -mx-2 px-2">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-base sm:text-lg font-semibold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
+                  <h2 className="text-base sm:text-lg font-semibold text-[#751731] dark:text-[#9E2F4B]">
                     Categories
                   </h2>
                   <div className="flex items-center space-x-2">
@@ -101,7 +101,7 @@ export default function CategorySidebar({
                   className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
                     selectedCategory === 'all'
                       ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md'
-                      : 'hover:bg-[#751731]/10 dark:hover:bg-[#751731]/20 text-gray-700 dark:text-gray-300'
+                      : 'hover:bg-[#751731]/10 dark:hover:bg-[#9E2F4B]/20 text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   <div className="flex items-center">
@@ -118,7 +118,7 @@ export default function CategorySidebar({
                     className={`w-full text-left px-3 py-2 rounded-lg transition-all ${
                       selectedCategory === category.id
                         ? 'bg-gradient-to-r from-[#751731] to-[#F4D165] text-white shadow-md'
-                        : 'hover:bg-[#751731]/10 dark:hover:bg-[#751731]/20 text-gray-700 dark:text-gray-300'
+                        : 'hover:bg-[#751731]/10 dark:hover:bg-[#9E2F4B]/20 text-gray-700 dark:text-gray-300'
                     }`}
                   >
                     <div className="flex items-center justify-between group">
@@ -129,7 +129,7 @@ export default function CategorySidebar({
                       <span className={`text-xs ${
                         selectedCategory === category.id
                           ? 'text-white'
-                          : 'text-gray-500 dark:text-gray-400 group-hover:text-[#751731] dark:group-hover:text-[#F4D165]'
+                          : 'text-gray-500 dark:text-gray-400 group-hover:text-[#751731] dark:group-hover:text-[#9E2F4B]'
                       }`}>
                         {category.count}
                       </span>

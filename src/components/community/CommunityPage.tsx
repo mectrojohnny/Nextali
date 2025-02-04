@@ -63,31 +63,15 @@ interface FirebasePost extends Omit<Post, 'timestamp'> {
 }
 
 const categories = [
-  { id: 'innovation', name: 'Business Innovation', icon: 'lightbulb', count: 24 },
-  { id: 'african-enterprise', name: 'African Enterprise', icon: 'business', count: 18 },
-  { id: 'technology', name: 'Technology', icon: 'computer', count: 15 },
-  { id: 'research', name: 'Research & Insights', icon: 'analytics', count: 12 },
+  { id: 'bill', name: 'Business Innovation Lab', icon: 'business_center', count: 24 },
+  { id: 'tea', name: 'Talent Exchange Academy', icon: 'school', count: 18 },
+  { id: 'nep', name: 'Next Entrepreneurs Platform', icon: 'rocket_launch', count: 15 },
+  { id: 'grants', name: 'Grants & Opportunities', icon: 'paid', count: 12 },
+  { id: 'mentorship', name: 'Mentorship', icon: 'groups', count: 14 },
+  { id: 'resources', name: 'Business Resources', icon: 'library_books', count: 16 },
   { id: 'success', name: 'Success Stories', icon: 'stars', count: 9 },
-  { id: 'skills', name: 'Skills Development', icon: 'school', count: 14 },
-  { id: 'market', name: 'Market Insights', icon: 'trending_up', count: 16 },
-  { id: 'community', name: 'Community', icon: 'people', count: 20 },
+  { id: 'announcements', name: 'Announcements', icon: 'campaign', count: 20 },
 ];
-
-const defaultPinnedPost: Post = {
-  id: 'pinned',
-  author: {
-    name: 'Chena G.',
-    avatar: 'nextali-logo.jpg',
-    isAdmin: true,
-  },
-  content: `Welcome to NextHub! This is your space to connect, collaborate, and grow with Africa&apos;s most innovative entrepreneurs and SMEs. Share your business insights, seek guidance, and be part of building Africa&apos;s next generation of successful businesses. 🌍✨`,
-  timestamp: new Date(),
-  likes: 156,
-  isLiked: false,
-  comments: [],
-  isPinned: true,
-  category: 'all',
-};
 
 export default function CommunityPage() {
   const { theme } = useTheme();
@@ -99,13 +83,38 @@ export default function CommunityPage() {
     email: '',
     isAnonymous: false
   });
-  const [posts, setPosts] = useState<Post[]>([defaultPinnedPost]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     const initializePosts = async () => {
       try {
-        // Fetch all posts except pinned
+        // First, add the pinned post if it doesn't exist
+        const pinnedPostRef = doc(db, 'posts', 'pinned');
+        const pinnedPostDoc = await getDoc(pinnedPostRef);
+
+        if (!pinnedPostDoc.exists()) {
+          const pinnedPost = {
+            id: 'pinned',
+            author: {
+              name: 'Akalas Raro',
+              avatar: 'logo.png',
+              isAdmin: true,
+            },
+            content: `Welcome to NextHub! This is your space to connect, collaborate, and grow with Africa's most innovative entrepreneurs and SMEs. Share your business insights, seek guidance, and be part of building Africa's next generation of successful businesses. 🌍✨`,
+            timestamp: Timestamp.now(),
+            likes: 156,
+            isLiked: false,
+            comments: [],
+            isPinned: true,
+            category: 'all',
+          };
+
+          logger.debug('Creating pinned post with avatar:', pinnedPost.author.avatar);
+          await setDoc(doc(db, 'posts', 'pinned'), pinnedPost);
+        }
+
+        // Then fetch all posts including the pinned one
         const postsRef = collection(db, 'posts');
         const q = query(postsRef, orderBy('timestamp', 'desc'));
         const querySnapshot = await getDocs(q);
@@ -117,9 +126,9 @@ export default function CommunityPage() {
             id: doc.id,
             timestamp: data.timestamp.toDate(),
           } as Post;
-        }).filter(post => post.id !== 'pinned'); // Exclude any pinned post from database
+        });
 
-        setPosts([defaultPinnedPost, ...fetchedPosts]);
+        setPosts(fetchedPosts);
       } catch (error) {
         console.error('Error initializing posts:', error);
       }
@@ -299,7 +308,7 @@ export default function CommunityPage() {
         <div className="flex-1 flex flex-col min-h-0">
           <main className={`flex-grow transition-colors duration-200 ${
             theme === 'dark' 
-              ? 'bg-gradient-to-b from-gray-900 via-[#751731]/30 to-gray-900' 
+              ? 'bg-gradient-to-b from-gray-900 via-[#9E2F4B]/30 to-gray-900' 
               : 'bg-gradient-to-b from-white via-[#751731]/5 to-white'
           }`}>
             {/* Main Content */}
@@ -311,11 +320,13 @@ export default function CommunityPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="text-center mb-8 sm:mb-12 pt-8 sm:pt-16"
                 >
-                  <h1 className="text-2xl sm:text-4xl font-bold mb-2 sm:mb-4 bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
-                    NextHub
+                  <h1 className="text-3xl sm:text-5xl font-extrabold mb-2 sm:mb-4 text-[#751731] dark:text-[#F4D165] tracking-tight leading-none drop-shadow-lg">
+                    <span className="inline-block transform hover:scale-105 transition-transform duration-200">
+                      Next<span className="text-[#F4D165] dark:text-[#9E2F4B]">Hub</span>
+                    </span>
                   </h1>
                   <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
-                    Connect, collaborate, and grow with Africa's next generation of successful entrepreneurs
+                    Connect, collaborate, and grow with Africa&apos;s next generation of successful entrepreneurs
                   </p>
                 </motion.div>
 
@@ -328,7 +339,7 @@ export default function CommunityPage() {
 
                     {/* Pinned Message */}
                     {pinnedPost && (
-                      <div className="mt-4 border-t border-[#751731]/20 dark:border-[#751731]/40 pt-4">
+                      <div className="mt-4 border-t border-[#751731]/20 dark:border-[#9E2F4B]/40 pt-4">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">
                           <div className="flex items-center">
                             <Avatar 
@@ -352,7 +363,7 @@ export default function CommunityPage() {
                             <span className="font-medium">Pinned Message</span>
                           </div>
                         </div>
-                        <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg leading-relaxed">
+                        <p className="text-gray-800 dark:text-white text-sm sm:text-lg leading-relaxed">
                           {pinnedPost.content}
                         </p>
                       </div>
@@ -360,10 +371,10 @@ export default function CommunityPage() {
 
                     <div className="text-center mb-4 sm:mb-6">
                       <div className="flex items-center justify-center mb-2 sm:mb-3">
-                        <span className="material-icons-outlined text-2xl sm:text-3xl bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent mr-2">
+                        <span className="material-icons-outlined text-2xl sm:text-3xl text-[#751731] dark:text-[#9E2F4B] mr-2">
                           {selectedCategory === 'all' ? 'forum' : categories.find(c => c.id === selectedCategory)?.icon || 'forum'}
                         </span>
-                        <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-[#751731] to-[#F4D165] bg-clip-text text-transparent">
+                        <h3 className="text-lg sm:text-xl font-semibold text-[#751731] dark:text-white">
                           {selectedCategory === 'all' ? 'All Community Stories' : categories.find(c => c.id === selectedCategory)?.name || 'Community Stories'}
                         </h3>
                       </div>
